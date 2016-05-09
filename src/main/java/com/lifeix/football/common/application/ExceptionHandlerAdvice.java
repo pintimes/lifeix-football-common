@@ -1,4 +1,4 @@
-package com.lifeix.football.common.exception;
+package com.lifeix.football.common.application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
