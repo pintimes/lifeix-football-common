@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.util.StringUtils;
-import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
 public class MockHttpUtil {
 
