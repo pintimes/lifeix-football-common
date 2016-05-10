@@ -107,6 +107,9 @@ public class JSONUtils {
      */
     public static <T> List<T> json2list(String jsonArrayStr, Class<T> clazz)
             throws JsonParseException, JsonMappingException, IOException {
+    	if (jsonArrayStr == null || jsonArrayStr.isEmpty()) {
+			return null ;
+		}
         List<Map<String, Object>> list = objectMapper.readValue(jsonArrayStr, new TypeReference<List<T>>() {
         });
         List<T> result = new ArrayList<T>();
