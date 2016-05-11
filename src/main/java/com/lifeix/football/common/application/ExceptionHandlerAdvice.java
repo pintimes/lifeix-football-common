@@ -3,7 +3,6 @@ package com.lifeix.football.common.application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -20,7 +19,6 @@ import com.lifeix.football.common.exception.NotFindException;
  * @author zengguangwei,gcc
  *
  */
-@ControllerAdvice
 public class ExceptionHandlerAdvice {
 
     private Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
