@@ -9,4 +9,12 @@
 		<artifactId>lifeix-football</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+
+	<dependencies>
+		<!--httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+	</dependencies>
 </project>
