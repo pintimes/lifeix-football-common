@@ -22,7 +22,7 @@ public class ApplicationUtil {
 
             @Override
             public void onApplicationEvent(ApplicationEvent event) {
-                logger.info(event.toString());
+//                logger.info(event.toString());
             }
         };
         app.addListeners(listeners);
