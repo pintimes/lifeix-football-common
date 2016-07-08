@@ -22,8 +22,7 @@ public class ListUtil {
         }
         return ts;
     }
-    
-    
+
     /**
      * 转化为Iterable对象
      * 
@@ -39,4 +38,5 @@ public class ListUtil {
         };
         return entites;
     }
+
 }
