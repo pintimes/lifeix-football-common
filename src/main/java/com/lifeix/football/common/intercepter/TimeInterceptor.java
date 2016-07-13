@@ -37,7 +37,7 @@ public class TimeInterceptor implements HandlerInterceptor {
             Exception exception) throws Exception {
         StopWatch watch = threadLocal.get();
         watch.stop();
-        logger.info("this request used time :--->" + watch.getLastTaskTimeMillis());
+        logger.info(handler+" used time :--->" + watch.getLastTaskTimeMillis());
     }
 
 }
