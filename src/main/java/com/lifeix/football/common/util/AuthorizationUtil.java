@@ -16,11 +16,24 @@ public class AuthorizationUtil {
      * @param groups
      */
     public static void adminAuthorization(String groups) {
-        if (StringUtils.isEmpty(groups)) {
+        if (StringUtils.isEmpty(groups)||!groups.contains("admin")) {
             throw new AuthorizationException();
         }
-        if (!groups.contains("admin")) {
-            throw new AuthorizationException();
+    }
+    
+    
+    /**
+     * @name userAdminAuthorization
+     * @description 管理员或用户授权，groups必须包含user或者admin才能通过授权
+     * @author xule
+     * @version 2016年8月24日 上午10:06:14
+     * @param 
+     * @return void
+     * @throws
+     */
+    public static void userAdminAuthorization(String groups) {
+        if (StringUtils.isEmpty(groups)||!(groups.contains("user")||groups.contains("admin"))) {
+        	throw new AuthorizationException();
         }
     }
 
