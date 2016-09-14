@@ -24,7 +24,7 @@ public class APIGatewayUtil {
 	 * @param user
 	 * @throws Exception 
 	 */
-	public static String registUserToAPIGateway(String host, Consumer dto) throws Exception {
+	public static String registToAPIGateway(String host, Consumer dto) throws Exception {
 		if (StringUtils.isEmpty(host)) {
 			throw new IllegalparamException("host is empty");
 		}
@@ -182,7 +182,7 @@ public class APIGatewayUtil {
 			String name = "zengguangwei3";
 			consumer.setCustom_id(name);
 			consumer.setUsername(name);
-			String key = APIGatewayUtil.registUserToAPIGateway(host, consumer);
+			String key = APIGatewayUtil.registToAPIGateway(host, consumer);
 			System.out.println(key);
 		} catch (Exception e) {
 			e.printStackTrace();
