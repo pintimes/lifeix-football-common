@@ -30,6 +30,7 @@ public class DateUtil {
 	
 	public static String toUTCStr(Date d) {
 		DateFormat format = new SimpleDateFormat(UTC_FORMAT_DEFAULT);
+		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return format.format(d);
 	}
 
