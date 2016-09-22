@@ -7,9 +7,14 @@ import org.springframework.util.StringUtils;
 
 import com.lifeix.football.common.exception.IllegalparamException;
 import com.lifeix.football.common.model.Consumer;
-
+/**
+ * API网关注册
+ * @author zengguangwei
+ *
+ */
 public class APIGatewayUtil {
-
+	
+	
 	/**
 	 * 注册用户到API网关 返回用户的auth key
 	 * 
@@ -19,7 +24,7 @@ public class APIGatewayUtil {
 	 * @param user
 	 * @throws Exception 
 	 */
-	public static String registUserToAPIGateway(String host, Consumer dto) throws Exception {
+	public static String registToAPIGateway(String host, Consumer dto) throws Exception {
 		if (StringUtils.isEmpty(host)) {
 			throw new IllegalparamException("host is empty");
 		}
@@ -39,11 +44,11 @@ public class APIGatewayUtil {
 		/**
 		 * create or update Consumer to APIGateway /consumers/ PUT
 		 */
-		Consumer consumer = saveOrUpdateConsumer(host, dto.getCustom_id());
+		Consumer consumer = saveOrUpdateConsumer(host, dto.getCustom_id(),dto.getUsername());
 		/**
 		 * create or update a Key for Consumer create /consumers/{id}/key-auth
 		 */
-		String key = authConsumer(host, consumer);
+		String key = keyAuthConsumer(host, consumer);
 		/**
 		 * Add Consumer to UserGroup
 		 */
@@ -82,8 +87,13 @@ public class APIGatewayUtil {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("group", group);
 		String result = HttpUtil.sendPost(host + "/consumers/" + consumerId + "/acls", params);
-		Map<String, Object> map = JSONUtils.json2map(result);
-		return map.get("group").toString();
+		Map<String, Object> map=new HashMap<>();
+		map = JSONUtils.json2map(result);
+		Object key=map.get("group");
+		if (key!=null) {
+			return key.toString();
+		}
+		return null;
 	}
 
 	/**
@@ -98,11 +108,16 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static String authConsumer(String host, Consumer consumer) throws Exception {
+	private static String keyAuthConsumer(String host, Consumer consumer) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
 		String result = HttpUtil.sendPut(host + "/consumers/" + consumer.getId() + "/key-auth", params);
-		Map<String, Object> map = JSONUtils.json2map(result);
-		return map.get("key").toString();
+		Map<String, Object> map=new HashMap<>();
+		map = JSONUtils.json2map(result);
+		Object key=map.get("key");
+		if (key!=null) {
+			return key.toString();
+		}
+		return null;
 	}
 
 	/**
@@ -117,12 +132,12 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static Consumer saveOrUpdateConsumer(String host, String custom_id) throws Exception {
+	private static Consumer saveOrUpdateConsumer(String host, String custom_id,String username) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
 		/**
 		 * 将用户Id作为用户名传入，用户名可能会有重名的情况
 		 */
-		params.put("username", custom_id);
+		params.put("username", username);
 		params.put("custom_id", custom_id);
 		String result = HttpUtil.sendPut(host + "/consumers", params);
 		return JSONUtils.json2pojo(result, Consumer.class);
@@ -160,17 +175,18 @@ public class APIGatewayUtil {
 	public static void main(String[] args) {
 		try {
 			APIGatewayUtil util = new APIGatewayUtil();
-			String host = "http://192.168.50.224:8001";
+			String host = "http://192.168.1.17:8001";
 
 			Consumer consumer = new Consumer();
 			consumer.setGroups("admin");
 			String name = "zengguangwei3";
 			consumer.setCustom_id(name);
 			consumer.setUsername(name);
-			String oldKey = util.registUserToAPIGateway(host, consumer);
-			System.out.println(oldKey);
+			String key = APIGatewayUtil.registToAPIGateway(host, consumer);
+			System.out.println(key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 }
