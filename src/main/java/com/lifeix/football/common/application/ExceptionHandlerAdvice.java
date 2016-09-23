@@ -1,6 +1,5 @@
 package com.lifeix.football.common.application;
 
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.lifeix.football.common.exception.AuthorizationException;
 import com.lifeix.football.common.exception.BaseException;
-import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 import com.lifeix.football.common.exception.NotFindException;
 
@@ -57,17 +55,6 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(NotFindException.class)
     public void NotFindException(NotFindException e) {
 	logger.error("NotFindException->" + e.getMessage(), e);
-    }
-
-    /**
-     * 业务异常，需要客户端知道异常信息
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "BaseException")
-    @ExceptionHandler(BusinessException.class)
-    public void BusinessException(HttpResponse response, BaseException e) {
-	logger.error("BaseException->" + e.getMessage(), e);
     }
 
     /**
