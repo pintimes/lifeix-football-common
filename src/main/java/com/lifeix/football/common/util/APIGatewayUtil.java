@@ -43,7 +43,7 @@ public class APIGatewayUtil {
 		 * 检索Consumer
 		 */
 		Consumer consumer = retrieveConsumer(host, username);
-		if (consumer == null) {
+		if (consumer == null||StringUtils.isEmpty(consumer.getId())) {
 			/**
 			 * create Consumer to APIGateway /consumers/ PUT
 			 */
@@ -203,7 +203,7 @@ public class APIGatewayUtil {
 				return null;
 			}
 			 JSONArray datasJSON = resultJSON.getJSONArray("data");
-			if (datasJSON == null) {
+			if (datasJSON == null||datasJSON.isEmpty()) {
 				return null ;
 			}
 			JSONObject dataJSON = datasJSON.getJSONObject(0);
