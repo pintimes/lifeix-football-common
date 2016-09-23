@@ -60,5 +60,24 @@ public class AuthorizationUtil {
         }
         throw new AuthorizationException();
     }
+    
+  /**
+   * @name userAuthorization
+   * @description 用户授权认证
+   * @author xule
+   * @version 2016年9月23日 下午2:11:29
+   * @param 
+   * @return void
+   * @throws
+   */
+    public static void userAuthorization(String groups,String kongId,String userId) {
+    	if (StringUtils.isEmpty(groups)) {
+    		throw new AuthorizationException();
+    	}
+    	if (groups.contains("user")&&userId.equals(kongId)) {
+    		return;
+    	}
+    	throw new AuthorizationException();
+    }
 
 }
