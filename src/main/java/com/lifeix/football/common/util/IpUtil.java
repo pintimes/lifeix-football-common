@@ -4,6 +4,8 @@ import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.util.StringUtils;
+
 public class IpUtil {
 
     /**
@@ -40,6 +42,26 @@ public class IpUtil {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+    
+    public static String getIpAddr2(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (!StringUtils.isEmpty(ip) && !"unknown".equalsIgnoreCase(ip)) {
+            String[] ips = ip.split(",");
+            if (ips.length > 0) {
+                ip = ips[0];
+            }
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;

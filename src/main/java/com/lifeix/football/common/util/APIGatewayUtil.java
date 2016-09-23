@@ -5,11 +5,18 @@ import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.lifeix.football.common.exception.IllegalparamException;
 import com.lifeix.football.common.model.Consumer;
-
+/**
+ * API网关注册
+ * @author zengguangwei
+ *
+ */
 public class APIGatewayUtil {
-
+	
+	
 	/**
 	 * 注册用户到API网关 返回用户的auth key
 	 * 
@@ -19,35 +26,45 @@ public class APIGatewayUtil {
 	 * @param user
 	 * @throws Exception 
 	 */
-	public static String registUserToAPIGateway(String host, Consumer dto) throws Exception {
+	public static String registToAPIGateway(String host, String userId,String group) throws Exception {
 		if (StringUtils.isEmpty(host)) {
 			throw new IllegalparamException("host is empty");
 		}
-		if (dto == null) {
-			throw new IllegalparamException("consumer is empty");
+		if (StringUtils.isEmpty(userId)) {
+			throw new IllegalparamException("consumer.userId is empty");
 		}
-		if (StringUtils.isEmpty(dto.getCustom_id())) {
-			throw new IllegalparamException("consumer.custom_id is empty");
-		}
-		if (StringUtils.isEmpty(dto.getGroups())) {
+		if (StringUtils.isEmpty(group)) {
 			throw new IllegalparamException("consumer.group is empty");
 		}
+		String custom_id = userId;
+		String username = userId;
+		
 		/**
-		 * 删除Consummer
+		 * 检索Consumer
 		 */
-		deleteConsumer(host, dto);
+		Consumer consumer = retrieveConsumer(host, username);
+		if (consumer == null||StringUtils.isEmpty(consumer.getId())) {
+			/**
+			 * create Consumer to APIGateway /consumers/ PUT
+			 */
+			 consumer = createConsumer(host, custom_id,username);
+		}
+		String kongId = consumer.getId();
 		/**
-		 * create or update Consumer to APIGateway /consumers/ PUT
+		 * 检索Consumer的Key
 		 */
-		Consumer consumer = saveOrUpdateConsumer(host, dto.getCustom_id());
+		String key = retrieveConsumerKey(host,kongId);
+		if (!StringUtils.isEmpty(key)) {
+			return key;
+		}
 		/**
-		 * create or update a Key for Consumer create /consumers/{id}/key-auth
+		 * create a Key for Consumer create /consumers/{id}/key-auth
 		 */
-		String key = authConsumer(host, consumer);
+		 key = keyAuthConsumer(host, kongId);
 		/**
 		 * Add Consumer to UserGroup
 		 */
-		addConsumerToUserGroup(host, consumer.getId(), dto.getGroups());
+		addConsumerToUserGroup(host, kongId, group);
 		return key;
 	}
 
@@ -78,12 +95,17 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static String addConsumerToUserGroup(String host, String consumerId, String group) throws Exception {
+	private static String addConsumerToUserGroup(String host, String consumerId, String groups) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("group", group);
+		params.put("group", groups);
 		String result = HttpUtil.sendPost(host + "/consumers/" + consumerId + "/acls", params);
-		Map<String, Object> map = JSONUtils.json2map(result);
-		return map.get("group").toString();
+		Map<String, Object> map=new HashMap<>();
+		map = JSONUtils.json2map(result);
+		Object key=map.get("group");
+		if (key!=null) {
+			return key.toString();
+		}
+		return null;
 	}
 
 	/**
@@ -98,13 +120,42 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static String authConsumer(String host, Consumer consumer) throws Exception {
+	private static String keyAuthConsumer(String host, String id) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
-		String result = HttpUtil.sendPut(host + "/consumers/" + consumer.getId() + "/key-auth", params);
-		Map<String, Object> map = JSONUtils.json2map(result);
-		return map.get("key").toString();
+		String result = HttpUtil.sendPut(host + "/consumers/" + id + "/key-auth", params);
+		Map<String, Object> map=new HashMap<>();
+		map = JSONUtils.json2map(result);
+		Object key=map.get("key");
+		if (key!=null) {
+			return key.toString();
+		}
+		return null;
 	}
 
+	/**
+	 * 检索
+	 * @description
+	 * @author zengguangwei 
+	 * @version 2016年9月22日下午7:42:41
+	 *
+	 * @param host
+	 * @param username
+	 * @return
+	 * @throws Exception
+	 */
+	private static Consumer retrieveConsumer(String host, String username) throws Exception {
+		String result = HttpUtil.sendGet(host + "/consumers/" + username);
+		if (StringUtils.isEmpty(result)) {
+			return null;
+		}
+		try {
+			return JSONUtils.json2pojo(result, Consumer.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	/**
 	 * https://getkong.org/docs/0.8.x/admin-api/#update-or-create-consumer
 	 * 
@@ -117,13 +168,13 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static Consumer saveOrUpdateConsumer(String host, String custom_id) throws Exception {
+	private static Consumer createConsumer(String host, String custom_id,String username) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
 		/**
 		 * 将用户Id作为用户名传入，用户名可能会有重名的情况
 		 */
-		params.put("username", custom_id);
 		params.put("custom_id", custom_id);
+		params.put("username", username);
 		String result = HttpUtil.sendPut(host + "/consumers", params);
 		return JSONUtils.json2pojo(result, Consumer.class);
 	}
@@ -134,43 +185,50 @@ public class APIGatewayUtil {
 		return host;
 	}
 
-//	private Consumer retrieveConsumer(String host, String custom_id) {
-//		String result = HttpUtil.sendGet(host + "/consumers/" + custom_id);
-//		if (StringUtils.isEmpty(result)) {
-//			return null;
-//		}
-//		try {
-//			return JSONUtils.json2pojo(result, Consumer.class);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+
 //
 //	private void deleteConsumerKey(String host, Consumer consumer) {
 //		HttpUtil.sendDelete(host + "/consumers/" + consumer.getId() + "/key-auth");
 //	}
 //
-//	private String retrieveConsumerKey(String host, String consumer_id) {
-//		Map<String, String> params = new HashMap<String, String>();
-//		String result = HttpUtil.sendGet(host + "/consumers/" + consumer_id + "/key-auth");
-//		// {"data":[{"created_at":1463119688000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"56d99579e4a544a88b3ed34352724b25","id":"834819af-cddc-47b8-8e3c-642cce328987"},{"created_at":1463120654000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"2045e025e9994862ba12127fc60f3dc5","id":"10abb63a-c494-4480-a7d0-5cda69d440d5"}],"total":2}
-//		return result;
-//	}
+	private static String retrieveConsumerKey(String host, String consumer_id) {
+		// {"data":[{"created_at":1463119688000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"56d99579e4a544a88b3ed34352724b25","id":"834819af-cddc-47b8-8e3c-642cce328987"},{"created_at":1463120654000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"2045e025e9994862ba12127fc60f3dc5","id":"10abb63a-c494-4480-a7d0-5cda69d440d5"}],"total":2}
+		try {
+			String result = HttpUtil.sendGet(host + "/consumers/" + consumer_id + "/key-auth");
+			if (StringUtils.isEmpty(result)) {
+				return null;
+			}
+			 JSONObject resultJSON = JSONObject.parseObject(result);
+			 if (resultJSON==null) {
+				return null;
+			}
+			 JSONArray datasJSON = resultJSON.getJSONArray("data");
+			if (datasJSON == null||datasJSON.isEmpty()) {
+				return null ;
+			}
+			JSONObject dataJSON = datasJSON.getJSONObject(0);
+			if (dataJSON==null) {
+				return null;
+			}
+			return dataJSON.getString("key");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null ;
+	}
+	
+	
 	public static void main(String[] args) {
 		try {
-			APIGatewayUtil util = new APIGatewayUtil();
-			String host = "http://192.168.50.224:8001";
+			String host = "http://192.168.1.17:8001";
 
-			Consumer consumer = new Consumer();
-			consumer.setGroups("admin");
-			String name = "zengguangwei3";
-			consumer.setCustom_id(name);
-			consumer.setUsername(name);
-			String oldKey = util.registUserToAPIGateway(host, consumer);
-			System.out.println(oldKey);
+			String userId = "zengguangweiUserId";
+			String key = APIGatewayUtil.registToAPIGateway(host, userId,"user");
+			String newKey = APIGatewayUtil.registToAPIGateway(host, userId,"user");
+			System.out.println(key+"--"+newKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 }
