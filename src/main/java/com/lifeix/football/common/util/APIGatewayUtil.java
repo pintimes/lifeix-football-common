@@ -26,43 +26,45 @@ public class APIGatewayUtil {
 	 * @param user
 	 * @throws Exception 
 	 */
-	public static String registToAPIGateway(String host, Consumer dto) throws Exception {
+	public static String registToAPIGateway(String host, String userId,String group) throws Exception {
 		if (StringUtils.isEmpty(host)) {
 			throw new IllegalparamException("host is empty");
 		}
-		if (dto == null) {
-			throw new IllegalparamException("consumer is empty");
+		if (StringUtils.isEmpty(userId)) {
+			throw new IllegalparamException("consumer.userId is empty");
 		}
-		if (StringUtils.isEmpty(dto.getCustom_id())) {
-			throw new IllegalparamException("consumer.custom_id is empty");
-		}
-		if (StringUtils.isEmpty(dto.getGroups())) {
+		if (StringUtils.isEmpty(group)) {
 			throw new IllegalparamException("consumer.group is empty");
 		}
+		String custom_id = userId;
+		String username = userId;
 		
-		Consumer consumer = retrieveConsumer(host, dto.getUsername());
+		/**
+		 * 检索Consumer
+		 */
+		Consumer consumer = retrieveConsumer(host, username);
 		if (consumer == null) {
 			/**
-			 * create or update Consumer to APIGateway /consumers/ PUT
+			 * create Consumer to APIGateway /consumers/ PUT
 			 */
-			 consumer = saveConsumer(host, dto.getCustom_id(),dto.getUsername());
+			 consumer = createConsumer(host, custom_id,username);
 		}
-		consumer.setCustom_id(dto.getCustom_id());
-		consumer.setUsername(dto.getUsername());
-		
-		
-		String key = retrieveConsumerKey(host,consumer.getId());
+		String kongId = consumer.getId();
+		/**
+		 * 检索Consumer的Key
+		 */
+		String key = retrieveConsumerKey(host,kongId);
 		if (!StringUtils.isEmpty(key)) {
 			return key;
 		}
 		/**
 		 * create a Key for Consumer create /consumers/{id}/key-auth
 		 */
-		 key = keyAuthConsumer(host, consumer);
+		 key = keyAuthConsumer(host, kongId);
 		/**
 		 * Add Consumer to UserGroup
 		 */
-		addConsumerToUserGroup(host, consumer.getId(), dto.getGroups());
+		addConsumerToUserGroup(host, kongId, group);
 		return key;
 	}
 
@@ -118,9 +120,9 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static String keyAuthConsumer(String host, Consumer consumer) throws Exception {
+	private static String keyAuthConsumer(String host, String id) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
-		String result = HttpUtil.sendPut(host + "/consumers/" + consumer.getId() + "/key-auth", params);
+		String result = HttpUtil.sendPut(host + "/consumers/" + id + "/key-auth", params);
 		Map<String, Object> map=new HashMap<>();
 		map = JSONUtils.json2map(result);
 		Object key=map.get("key");
@@ -166,7 +168,7 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception 
 	 */
-	private static Consumer saveConsumer(String host, String custom_id,String username) throws Exception {
+	private static Consumer createConsumer(String host, String custom_id,String username) throws Exception {
 		Map<String, String> params = new HashMap<String, String>();
 		/**
 		 * 将用户Id作为用户名传入，用户名可能会有重名的情况
@@ -220,13 +222,9 @@ public class APIGatewayUtil {
 		try {
 			String host = "http://192.168.1.17:8001";
 
-			Consumer consumer = new Consumer();
-			consumer.setGroups("user");
 			String userId = "zengguangweiUserId";
-			consumer.setCustom_id(userId);
-			consumer.setUsername(userId);
-			String key = APIGatewayUtil.registToAPIGateway(host, consumer);
-			String newKey = APIGatewayUtil.registToAPIGateway(host, consumer);
+			String key = APIGatewayUtil.registToAPIGateway(host, userId,"user");
+			String newKey = APIGatewayUtil.registToAPIGateway(host, userId,"user");
 			System.out.println(key+"--"+newKey);
 		} catch (Exception e) {
 			e.printStackTrace();
