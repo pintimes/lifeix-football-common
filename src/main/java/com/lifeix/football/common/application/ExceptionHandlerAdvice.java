@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.lifeix.football.common.exception.AuthorizationException;
 import com.lifeix.football.common.exception.BaseException;
+import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 import com.lifeix.football.common.exception.NotFindException;
 
@@ -59,13 +60,24 @@ public class ExceptionHandlerAdvice {
     }
 
     /**
-     * 业务异常，客户端端请求不能受理
+     * 业务异常，需要客户端知道异常信息
+     * 
+     * @param e
+     */
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "BaseException")
+    @ExceptionHandler(BusinessException.class)
+    public void BusinessException(HttpResponse response, BaseException e) {
+	logger.error("BaseException->" + e.getMessage(), e);
+    }
+
+    /**
+     * 基础异常，客户端端请求不能受理
      * 
      * @param e
      */
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "BaseException")
     @ExceptionHandler(BaseException.class)
-    public void BaseException(HttpResponse response, BaseException e) {
+    public void BaseException(BaseException e) {
 	logger.error("BaseException->" + e.getMessage(), e);
     }
 
