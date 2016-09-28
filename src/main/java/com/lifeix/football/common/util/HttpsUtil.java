@@ -97,7 +97,7 @@ public class HttpsUtil {
     	return null;
     }
     /**
-     * @name httpsPost
+     * @name sendPost
      * @description 发送https的post请求
      * @author xule
      * @version 2016年9月27日 下午4:46:13
@@ -106,7 +106,7 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String httpsPost(String link , String param) throws Exception{
+    public static String sendPost(String link , String param) throws Exception{
         URL url = new URL(link+"?"+param);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
@@ -123,7 +123,7 @@ public class HttpsUtil {
     }
     
     /**
-     * @name httpsGet
+     * @name sendGet
      * @description 发送https的get请求
      * @author xule
      * @version 2016年9月27日 下午4:46:13
@@ -131,7 +131,7 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String httpsGet(String link) throws Exception{
+    public static String sendGet(String link) throws Exception{
     	URL url = new URL(link);
     	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     	conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
@@ -141,7 +141,7 @@ public class HttpsUtil {
     }
     
     /**
-     * @name httpsPut
+     * @name sendPut
      * @description 发送https的put请求
      * @author xule
      * @version 2016年9月27日 下午4:46:13
@@ -150,7 +150,7 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String httpsPut(String link, String param) throws Exception{
+    public static String sendPut(String link, String param) throws Exception{
     	URL url = new URL(link+"?"+param);
     	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     	conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
@@ -162,7 +162,7 @@ public class HttpsUtil {
     }
     
 //    /**
-//     * @name httpsDelete
+//     * @name sendDelete
 //     * @description 发送https的delete请求
 //     * @author xule
 //     * @version 2016年9月27日 下午4:46:13
@@ -171,7 +171,7 @@ public class HttpsUtil {
 //     * @return String 请求失败返回null
 //     * @throws Exception
 //     */
-//    public static String httpsDelete(String link, String param) throws Exception{
+//    public static String sendDelete(String link, String param) throws Exception{
 //    	URL url = new URL(link+"?"+param);
 //    	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 //    	conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
