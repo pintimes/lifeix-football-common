@@ -1,11 +1,20 @@
 package com.lifeix.football.common.application;
 
+import java.io.IOException;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+import org.springframework.web.servlet.ModelAndView;
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.lifeix.football.common.exception.AuthorizationException;
 import com.lifeix.football.common.exception.BaseException;
 import com.lifeix.football.common.exception.IllegalparamException;
@@ -13,6 +22,7 @@ import com.lifeix.football.common.exception.NotFindException;
 
 /**
  * 参见 https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc 异常处理类
+ * 返回rest形式数据 https://www.jayway.com/2014/10/19/spring-boot-error-responses/
  * 将通用的异常放于此处
  * 
  * add not find exception gcc
@@ -22,61 +32,97 @@ import com.lifeix.football.common.exception.NotFindException;
  */
 public class ExceptionHandlerAdvice {
 
-    private Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
+	private Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
 
-    /**
-     * 授权失败，请求了需要授权的API
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "AuthorizationException")
-    @ExceptionHandler(AuthorizationException.class)
-    public void AuthorizationException(AuthorizationException e) {
-	logger.error("AuthorizationException->" + e.getMessage(), e);
-    }
+	/**
+	 * 授权失败，请求了需要授权的API
+	 * 
+	 * @param e
+	 */
+	@ExceptionHandler(AuthorizationException.class)
+	public void AuthorizationException(HttpServletResponse response, AuthorizationException e) {
+		handerException(response, HttpStatus.UNAUTHORIZED, e);
+	}
 
-    /**
-     * 错误参数异常
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "LegalparamException")
-    @ExceptionHandler(IllegalparamException.class)
-    public void LegalparamException(IllegalparamException e) {
-	logger.error("LegalparamException->" + e.getMessage(), e);
-    }
+	/**
+	 * 错误参数异常
+	 * 
+	 * @param e
+	 */
+	@ExceptionHandler(IllegalparamException.class)
+	public void LegalparamException(HttpServletResponse response, IllegalparamException e) {
+		handerException(response, HttpStatus.BAD_REQUEST, e);
+	}
 
-    /**
-     * 资源未找到异常
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "NotFindException")
-    @ExceptionHandler(NotFindException.class)
-    public void NotFindException(NotFindException e) {
-	logger.error("NotFindException->" + e.getMessage(), e);
-    }
+	/**
+	 * 资源未找到异常
+	 * 
+	 * @param e
+	 */
+	@ExceptionHandler(NotFindException.class)
+	public void handleNotFindException(HttpServletResponse response, NotFindException e) throws IOException {
+		// response.setStatus(HttpStatus.NOT_FOUND.value());
+		// ServletOutputStream os = response.getOutputStream();
+		// os.write(e.getMessage().getBytes());
+		// os.flush();
+		// os.close();
+		handerException(response, HttpStatus.NOT_FOUND, e);
+	}
 
-    /**
-     * 基础异常，客户端端请求不能受理
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "BaseException")
-    @ExceptionHandler(BaseException.class)
-    public void BaseException(BaseException e) {
-	logger.error("BaseException->" + e.getMessage(), e);
-    }
+	/**
+	 * 基础异常，客户端端请求不能受理
+	 * 
+	 * @param e
+	 */
+	@ExceptionHandler(BaseException.class)
+	public void handleBaseException(HttpServletResponse response, BaseException e) {
+		handerException(response, HttpStatus.BAD_REQUEST, e);
+	}
 
-    /**
-     * 其他异常不能捕获则进入此方法 ，比如数据库网络失效等非运行时异常
-     * 
-     * @param e
-     */
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Exception")
-    @ExceptionHandler(Exception.class)
-    public void Exception(Exception e) {
-	logger.error("Exception->" + e.getMessage(), e);
-    }
+	/**
+	 * 其他异常不能捕获则进入此方法 ，比如数据库网络失效等非运行时异常
+	 * 
+	 * @param e
+	 * @throws IOException
+	 */
+	@ExceptionHandler(Exception.class)
+	public void Exception(HttpServletResponse response, Exception e) throws IOException {
+		logger.error(e.getMessage(), e);
+		handerException(response, HttpStatus.INTERNAL_SERVER_ERROR, "服务器异常");
+	}
+
+	/**
+	 * 错误处理
+	 * @description
+	 * @author zengguangwei 
+	 * @version 2016年10月10日下午5:18:15
+	 *
+	 * @param response
+	 * @param status
+	 * @param message
+	 */
+	private void handerException(HttpServletResponse response, HttpStatus status, Exception e) {
+		logger.error(e.getMessage(), e);
+		handerException(response, status, e.getMessage());
+	}
+
+	/**
+	 * 错误处理
+	 * @description
+	 * @author zengguangwei 
+	 * @version 2016年10月10日下午5:18:15
+	 *
+	 * @param response
+	 * @param status
+	 * @param message
+	 */
+	private void handerException(HttpServletResponse response, HttpStatus status, String message) {
+		try {
+			response.setContentType("application/json");
+			response.sendError(status.value(), message);
+		} catch (IOException ioE) {
+			logger.error("handerException", ioE);
+		}
+	}
 
 }

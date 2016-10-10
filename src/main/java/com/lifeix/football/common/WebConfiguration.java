@@ -16,11 +16,17 @@ import com.lifeix.football.common.intercepter.TimeInterceptor;
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
+	/**
+	 * 记录每一个请求处理事件
+	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new TimeInterceptor());
 	}
 
+	/**
+	 * 跨域处理	
+	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedHeaders("*").allowedMethods("*").allowedOrigins("*");

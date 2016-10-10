@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,8 +22,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import ch.qos.logback.core.joran.conditional.IfAction;
 
 public class HttpUtil {
 
@@ -80,5 +77,5 @@ public class HttpUtil {
 		}
 		return result.toString();
 	}
-
+	
 }
