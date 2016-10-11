@@ -79,7 +79,6 @@ public class HttpsUtil {
      */
     private static String getResult(HttpsURLConnection conn){
     	try {
-			if (conn.getResponseCode() == 200) {  
 				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));  
 				String inputLine;  
 				String result="";
@@ -88,7 +87,6 @@ public class HttpsUtil {
 				}  
 				in.close();  
 				return result;  
-			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
