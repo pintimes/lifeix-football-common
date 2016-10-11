@@ -79,6 +79,7 @@ public class HttpsUtil {
      */
     private static String getResult(HttpsURLConnection conn){
     	try {
+			if (conn.getResponseCode() == 200) {  
 				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));  
 				String inputLine;  
 				String result="";
@@ -87,10 +88,13 @@ public class HttpsUtil {
 				}  
 				in.close();  
 				return result;  
+			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			return e.getMessage();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return e.getMessage();
 		}
     	return null;
     }
@@ -104,20 +108,26 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String sendPost(String link , String param) throws Exception{
-        URL url = new URL(link+"?"+param);
-        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
-        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-        conn.setDoInput(true);  
-        conn.setDoOutput(true);  
-        conn.setUseCaches(false);  
-        conn.setConnectTimeout(50000);//设置连接超时
-        conn.setReadTimeout(50000);//设置读取超时
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
-        conn.connect();  
-		return getResult(conn);  
+    public static String sendPost(String link , String param){
+        URL url;
+		try {
+			url = new URL(link+"?"+param);
+	        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+	        conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
+	        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+	        conn.setDoInput(true);  
+	        conn.setDoOutput(true);  
+	        conn.setUseCaches(false);  
+	        conn.setConnectTimeout(50000);//设置连接超时
+	        conn.setReadTimeout(50000);//设置读取超时
+	        conn.setRequestMethod("POST");
+	        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
+	        conn.connect();  
+	        return getResult(conn);  
+		} catch (IOException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
     }
     
     /**
