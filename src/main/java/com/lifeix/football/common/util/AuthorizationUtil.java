@@ -80,4 +80,24 @@ public class AuthorizationUtil {
     	throw new AuthorizationException();
     }
 
+
+	/**
+	 * @name monitorAuthorization
+	 * @description
+	 * @author xule
+	 * @version 2016年10月18日 上午10:09:59
+	 * @param 
+	 * @return void
+	 * @throws 
+	 */
+	public static void monitorAuthorization(String groups) {
+		if (StringUtils.isEmpty(groups)) {
+    		throw new AuthorizationException();
+    	}
+    	if (groups.contains("monitor")) {
+    		return;
+    	}
+    	throw new AuthorizationException();
+	}
+
 }
