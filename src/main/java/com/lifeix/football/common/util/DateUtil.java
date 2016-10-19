@@ -17,6 +17,9 @@ public class DateUtil {
 	private static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd";
 	
 	private static final String UTC_FORMAT_DEFAULT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+	
+	private static final String ENG_FORMAT_DEFAULT = "E MMM dd HH:mm:ss ZZZZ yyyy";
+	
 
 	public static String toDateStr(Date d) {
 		DateFormat format = new SimpleDateFormat(DATE_FORMAT_DEFAULT);
@@ -33,6 +36,16 @@ public class DateUtil {
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return format.format(d);
 	}
+	
+	public static Date engToDate(String dateStr) {
+		DateFormat format = new SimpleDateFormat(ENG_FORMAT_DEFAULT,Locale.ENGLISH);
+		try {
+			return format.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public static void main(String[] args) throws ParseException {
 //		String dateStr = "Thu Jun 30 09:15:27 +0800 2016";
@@ -46,9 +59,12 @@ public class DateUtil {
 //		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 //		Date date = dateFormat.parse(dateStr);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss ZZZZ yyyy",Locale.ENGLISH);
-		String format2 = sdf.format(new Date(1467249327000l));
-		System.out.println(format2);
+//		SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss ZZZZ yyyy",Locale.ENGLISH);
+//		String format2 = sdf.format(new Date(1467249327000l));
+//		System.out.println(format2);
+		
+		Date date = engToDate("Sun Oct 16 12:47:13 +0800 2016");
+		System.out.println(DateUtil.toTimeStr(date));
 	}
 
 }

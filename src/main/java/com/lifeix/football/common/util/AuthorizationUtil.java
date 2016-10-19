@@ -1,5 +1,7 @@
 package com.lifeix.football.common.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.util.StringUtils;
 
 import com.lifeix.football.common.exception.AuthorizationException;
@@ -19,6 +21,15 @@ public class AuthorizationUtil {
         if (StringUtils.isEmpty(groups)||!groups.contains("admin")) {
             throw new AuthorizationException();
         }
+        HttpServletRequest currentRequest = BaseApi.getCurrentRequest();
+    	/**
+    	 * 内网进入的认为是管理员，admin不通过网关传入
+    	 * 从前置获得header from字段，如果有值则表示是从kong过来的即不是一个Admin
+    	 */
+    	String from = currentRequest.getHeader("from");
+    	if (!StringUtils.isEmpty(from)) {
+			throw new AuthorizationException();
+		}
     }
     
     

@@ -1,7 +1,5 @@
 package com.lifeix.football.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -12,7 +10,6 @@ public class ApplicationUtil {
 
 	
 	public static void run(Class<?> applicationClass,String[] args){
-		Logger logger = LoggerFactory.getLogger(applicationClass);
         SpringApplication app = new SpringApplication(applicationClass);
         /**
          * 应用程序事件,一般情况处理ApplicationContext 没有初始化的事件 e.g ApplicationStartedEvent
