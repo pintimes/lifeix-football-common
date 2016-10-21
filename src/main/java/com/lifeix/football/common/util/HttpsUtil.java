@@ -112,7 +112,7 @@ public class HttpsUtil {
 	 * @return String
 	 * @throws 
 	 */
-	private static String getParam(Map<String, String> map) {
+	private static String getParam(Map<String, Object> map) {
 		if (CollectionUtils.isEmpty(map)) {
 			return "";
 		}
@@ -157,7 +157,7 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String sendPost(String link , Map<String, String> map) throws Exception{
+    public static String sendPost(String link , Map<String, Object> map) throws Exception{
     	String param=getParam(map);
         URL url = new URL(link+param);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -184,7 +184,7 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String sendPut(String link, Map<String, String> map) throws Exception{
+    public static String sendPut(String link, Map<String, Object> map) throws Exception{
     	String param=getParam(map);
     	URL url = new URL(link+param);
     	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
