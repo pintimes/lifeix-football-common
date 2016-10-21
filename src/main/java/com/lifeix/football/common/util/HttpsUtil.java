@@ -9,12 +9,18 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.Set;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import org.hibernate.validator.internal.util.privilegedactions.GetAnnotationParameter;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @description 发送https请求工具类，无论网站是否具有受信任的证书，都会将其设置为受信任的网站，因此使用该工具类需要注意请求链接的安全问题
@@ -88,41 +94,42 @@ public class HttpsUtil {
 				}  
 				in.close();  
 				return result;  
+			}else {
+				return conn.getResponseCode()+" "+conn.getResponseMessage();
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
     	return null;
     }
-    /**
-     * @name sendPost
-     * @description 发送https的post请求
-     * @author xule
-     * @version 2016年9月27日 下午4:46:13
-     * @param link 请求地址，也就是url
-     * 		  param 请求参数，用'&'拼接成字符串（应该有更好的方式，但是我还没有找到）
-     * @return String 请求失败返回null
-     * @throws Exception
-     */
-    public static String sendPost(String link , String param) throws Exception{
-        URL url = new URL(link+"?"+param);
-        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
-        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-        conn.setDoInput(true);  
-        conn.setDoOutput(true);  
-        conn.setUseCaches(false);  
-        conn.setConnectTimeout(50000);//设置连接超时
-        conn.setReadTimeout(50000);//设置读取超时
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
-        conn.connect();  
-		return getResult(conn);  
-    }
     
     /**
+	 * @name getParam
+	 * @description 根据post或put请求map拼接参数
+	 * @author xule
+	 * @version 2016年10月21日 上午11:26:46
+	 * @param 
+	 * @return String
+	 * @throws 
+	 */
+	private static String getParam(Map<String, String> map) {
+		if (CollectionUtils.isEmpty(map)) {
+			return "";
+		}
+		String param="";
+    	Set<String> keySet = map.keySet();
+    	for (String key : keySet) {
+			if (!"".equals(param)) {//不是一个参数，需要拼接“&”
+				param+="&"+key+"="+map.get(key);
+			}else{//是一个参数，需要拼接“?”
+				param+="?"+key+"="+map.get(key);
+			}
+		}
+    	return param;
+	}
+	
+	
+	/**
      * @name sendGet
      * @description 发送https的get请求
      * @author xule
@@ -139,6 +146,33 @@ public class HttpsUtil {
     	conn.connect();  
     	return getResult(conn);
     }
+	
+    /**
+     * @name sendPost
+     * @description 发送https的post请求
+     * @author xule
+     * @version 2016年9月27日 下午4:46:13
+     * @param link 请求地址，也就是url
+     * 		  param 请求参数，用'&'拼接成字符串（应该有更好的方式，但是我还没有找到）
+     * @return String 请求失败返回null
+     * @throws Exception
+     */
+    public static String sendPost(String link , Map<String, String> map) throws Exception{
+    	String param=getParam(map);
+        URL url = new URL(link+param);
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
+        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+        conn.setDoInput(true);  
+        conn.setDoOutput(true);  
+        conn.setUseCaches(false);  
+        conn.setConnectTimeout(50000);//设置连接超时
+        conn.setReadTimeout(50000);//设置读取超时
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
+        conn.connect();  
+		return getResult(conn);  
+    }
     
     /**
      * @name sendPut
@@ -150,8 +184,9 @@ public class HttpsUtil {
      * @return String 请求失败返回null
      * @throws Exception
      */
-    public static String sendPut(String link, String param) throws Exception{
-    	URL url = new URL(link+"?"+param);
+    public static String sendPut(String link, Map<String, String> map) throws Exception{
+    	String param=getParam(map);
+    	URL url = new URL(link+param);
     	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     	conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
     	conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
