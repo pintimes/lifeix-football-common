@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +39,7 @@ public class HttpUtil {
 	public static String sendPost(String url, Map<String, String> map) throws Exception {
 		HttpPost http = new HttpPost(url);
 		http.setEntity(getEntity(map));
+		System.out.println(http.getEntity().getContentEncoding()+"  -------");
 		return sendHttp(http);
 	}
 
@@ -55,7 +57,7 @@ public class HttpUtil {
 				urlParameters.add(new BasicNameValuePair(key, map.get(key)));
 			}
 		}
-		return new UrlEncodedFormEntity(urlParameters);
+		return new UrlEncodedFormEntity(urlParameters, "utf-8");
 	}
 
 	@SuppressWarnings("resource")
