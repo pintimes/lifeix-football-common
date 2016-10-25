@@ -39,7 +39,6 @@ public class HttpUtil {
 	public static String sendPost(String url, Map<String, String> map) throws Exception {
 		HttpPost http = new HttpPost(url);
 		http.setEntity(getEntity(map));
-		System.out.println(http.getEntity().getContentEncoding()+"  -------");
 		return sendHttp(http);
 	}
 

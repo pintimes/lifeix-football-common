@@ -22,6 +22,8 @@ import javax.net.ssl.X509TrustManager;
 import org.hibernate.validator.internal.util.privilegedactions.GetAnnotationParameter;
 import org.springframework.util.CollectionUtils;
 
+import com.lifeix.football.common.exception.BusinessException;
+
 /**
  * @description 发送https请求工具类，无论网站是否具有受信任的证书，都会将其设置为受信任的网站，因此使用该工具类需要注意请求链接的安全问题
  * @author xule
@@ -95,7 +97,7 @@ public class HttpsUtil {
 				in.close();  
 				return result;  
 			}else {
-				return conn.getResponseCode()+" "+conn.getResponseMessage();
+				throw new BusinessException(conn.getResponseCode()+" "+conn.getResponseMessage());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +155,7 @@ public class HttpsUtil {
      * @author xule
      * @version 2016年9月27日 下午4:46:13
      * @param link 请求地址，也就是url
-     * 		  param 请求参数，用'&'拼接成字符串（应该有更好的方式，但是我还没有找到）
+     * 		  map 请求参数表
      * @return String 请求失败返回null
      * @throws Exception
      */
@@ -180,7 +182,7 @@ public class HttpsUtil {
      * @author xule
      * @version 2016年9月27日 下午4:46:13
      * @param link 请求地址，也就是url
-     * 		  param 请求参数，用'&'拼接成字符串（应该有更好的方式，但是我还没有找到）
+     * 		  map 请求参数表
      * @return String 请求失败返回null
      * @throws Exception
      */
