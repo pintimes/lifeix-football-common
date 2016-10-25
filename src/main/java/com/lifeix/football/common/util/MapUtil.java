@@ -15,5 +15,12 @@ public class MapUtil {
 		}
 		return result ;
 	}
+
+	public static boolean isEmpty(Map<String, String> map) {
+		if (map == null) {
+			return true;
+		}
+		return map.size()==0;
+	}
 	
 }
