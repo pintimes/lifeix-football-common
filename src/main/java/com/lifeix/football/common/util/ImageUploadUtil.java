@@ -116,6 +116,9 @@ public class ImageUploadUtil {
 		return null;
 	}
 	
+	
+//	private static getArrays
+	
 	/**
  	 * @name getSuffix
 	 * @description 根据图片链接地址获得图片后缀名，地址中不存在图片后缀名或者不是规范图片格式的图片给全部默认为jpg格式的图片
@@ -127,12 +130,17 @@ public class ImageUploadUtil {
 	 * @throws
 	 */
 	public static String getSuffix(String imgUrl){
+		String image=imgUrl;
 		Set<String> imgSuffixSet=new HashSet<>();
 		imgSuffixSet.add(".jpg");
 		imgSuffixSet.add(".jpeg");
 		imgSuffixSet.add(".png");
 		imgSuffixSet.add(".gif");
-		String suffix = imgUrl.substring(imgUrl.lastIndexOf("."));
+		int index1 = image.indexOf("?");
+		if (index1>=0) {
+			image=image.substring(0, index1);
+		}
+		String suffix = image.substring(image.lastIndexOf("."));
 		if (StringUtils.isEmpty(suffix)||!imgSuffixSet.contains(suffix)) {//当前图片后缀为空，或者不是合法格式的图片，全部转换成.jpg格式的图片
 			suffix=".jpg";
 		}
