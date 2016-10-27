@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -31,7 +34,7 @@ public class HttpUtil {
 	public static final String CONTENT_TYPE_APPLICATION_JSON="application/json;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_TEXT="application/text;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_URLENCODED="application/x-www-form-urlencoded";
-
+	
 	public static String sendDelete(String url) throws Exception {
 		HttpDelete http = new HttpDelete(url);
 		return sendHttp(http);
