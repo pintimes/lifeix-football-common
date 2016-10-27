@@ -77,6 +77,7 @@ public class ImageUploadUtil {
 			}
 			
 			String newImage = imageHost+key;//生成图片完整路径
+			logger.info("newImage= "+newImage);
 			if (imageExists(newImage)) {//图片存在，不需要重复上传
 				return newImage;
 			}
