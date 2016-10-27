@@ -71,7 +71,6 @@ public class AuthorizationUtil {
         }
         throw new AuthorizationException();
     }
-    
   /**
    * @name userAuthorization
    * @description 用户授权认证
@@ -85,7 +84,41 @@ public class AuthorizationUtil {
     	if (StringUtils.isEmpty(groups)) {
     		throw new AuthorizationException();
     	}
-    	if (groups.contains("user")&&userId.equals(kongId)) {
+    	if (groups.contains("user")&&(kongId==null&&userId==null||userId.equals(kongId))) {
+    		return;
+    	}
+    	throw new AuthorizationException();
+    }
+    
+    /**
+     * @name competitionUserAuthorization
+     * @description 赛事系统用户授权认证
+     * @author xule
+     * @version 2016年9月23日 下午2:11:29
+     * @param 
+     * @return void
+     * @throws
+     */
+    public static void competitionUserAuthorization(String groups) {
+    	if (StringUtils.isEmpty(groups)||!groups.contains("competition_user")) {
+    		throw new AuthorizationException();
+    	}
+    }
+    
+    /**
+     * @name competitionUserAuthorization
+     * @description 赛事系统用户授权认证
+     * @author xule
+     * @version 2016年9月23日 下午2:11:29
+     * @param 
+     * @return void
+     * @throws
+     */
+    public static void competitionUserAuthorization(String groups,String kongId,String userId) {
+    	if (StringUtils.isEmpty(groups)) {
+    		throw new AuthorizationException();
+    	}
+    	if (groups.contains("competition_user")&&userId.equals(kongId)) {
     		return;
     	}
     	throw new AuthorizationException();
