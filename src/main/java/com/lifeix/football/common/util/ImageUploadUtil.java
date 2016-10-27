@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lifeix.football.common.exception.BusinessException;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
@@ -78,7 +79,7 @@ public class ImageUploadUtil {
 			
 			String newImage = imageHost+key;//生成图片完整路径
 			logger.info("newImage= "+newImage);
-			if (imageExists(newImage)) {//图片存在，不需要重复上传
+			if (head(newImage)) {//图片存在，不需要重复上传
 				return newImage;
 			}
 			
@@ -87,7 +88,13 @@ public class ImageUploadUtil {
 			 */
 			String imgName=imgUrl;
 			String token = getUploadToken(fileHost,imgName);
+			if (StringUtils.isEmpty(token)) {
+				throw new BusinessException("图片上传token为空");
+			}
 			JSONObject uploadTokenJson= JSONObject.parseObject(token);//获得token
+			if (uploadTokenJson==null||uploadTokenJson.isEmpty()) {
+				throw new BusinessException("图片上传token为空");
+			}
 			String uploadToken = uploadTokenJson.getString("uptoken");
 			
 			/**
@@ -253,10 +260,10 @@ public class ImageUploadUtil {
 	 * @return boolean
 	 * @throws
 	 */
-	public static boolean imageExists(String image){
+	public static boolean head(String urlStr){
 		URL url;
 		try {
-			url = new URL(image);
+			url = new URL(urlStr);
 			HttpURLConnection conn=(HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("HEAD");
 			conn.connect(); 
