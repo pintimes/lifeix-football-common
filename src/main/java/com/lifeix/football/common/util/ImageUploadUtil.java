@@ -74,7 +74,7 @@ public class ImageUploadUtil {
 			Response res = uploadManager.put(b,key,uploadToken);//上传图片
 			JSONObject result=JSONObject.parseObject(res.bodyString());
 			if (result!=null) {
-				return result.getString("key");
+				return imageHost+result.getString("key");
 			}
 			return null;
 		} catch (QiniuException e) {
@@ -95,7 +95,7 @@ public class ImageUploadUtil {
 	 * @return byte[]
 	 * @throws
 	 */
-	private static byte[] readData(String url){
+	public static byte[] readData(String url){
 		URL URL;
 		try {
 			URL = new URL(url);
