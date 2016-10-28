@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +27,41 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 
 public class HttpUtil {
 	public static final String CONTENT_TYPE_APPLICATION_JSON="application/json;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_TEXT="application/text;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_URLENCODED="application/x-www-form-urlencoded";
+	
+	/**
+	 * @throws Exception 
+	 * @name sendHead 
+	 * @description 发送head请求，判断链接是否可用
+	 * @author xule
+	 * @version 2016年10月27日 下午2:01:47
+	 * @param 
+	 * @return boolean 链接可用返回true，否则返回false
+	 * @throws
+	 */
+	public static boolean sendHead(String urlStr) throws Exception{
+		if (urlStr.startsWith("https")) {
+			throw new BusinessException("不支持的协议类型，请使用http");
+		}
+		URL url;
+		url = new URL(urlStr);
+		HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("HEAD");
+		conn.connect(); 
+		int resCode=conn.getResponseCode();
+		conn.disconnect();
+		if (resCode==404) {
+			return false;
+		}
+		return true;
+	}
 	
 	public static String sendDelete(String url) throws Exception {
 		HttpDelete http = new HttpDelete(url);
@@ -50,7 +81,7 @@ public class HttpUtil {
 	
 	/**
 	 * @name sendPost
-	 * @description
+	 * @description headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @author xule
 	 * @version 2016年10月26日 下午5:05:20
 	 * @param 
@@ -69,7 +100,7 @@ public class HttpUtil {
 	 * @description
 	 * @author xule
 	 * @version 2016年10月26日 下午4:05:36
-	 * @param 
+	 * @param headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @return String
 	 * @throws
 	 */
@@ -98,7 +129,7 @@ public class HttpUtil {
 	 * @description
 	 * @author xule
 	 * @version 2016年10月26日 下午5:05:20
-	 * @param headers 请求头，为空时自动设置content-type：application/json
+	 * @param headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @return String
 	 * @throws
 	 */
@@ -114,7 +145,7 @@ public class HttpUtil {
 	 * @description
 	 * @author xule
 	 * @version 2016年10月26日 下午4:05:36
-	 * @param 
+	 * @param headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @return String
 	 * @throws
 	 */
@@ -133,10 +164,10 @@ public class HttpUtil {
 	
 	/**
 	 * @name setHttpHeaders
-	 * @description
+	 * @description 
 	 * @author xule
 	 * @version 2016年10月26日 下午5:02:07
-	 * @param 
+	 * @param headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @return Object
 	 * @throws
 	 */
