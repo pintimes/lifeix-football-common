@@ -3,7 +3,6 @@
  */
 package com.lifeix.football.common.util;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -94,7 +93,7 @@ public class ImageUtil {
 	 * @return String
 	 * @throws
 	 */
-	public static String calcETag(byte[] fileData) throws IOException,NoSuchAlgorithmException {
+	public static String calcETag(byte[] fileData) throws NoSuchAlgorithmException {
 		String etag = "";
 		long fileLength = fileData.length;
 		if (fileLength <= CHUNK_SIZE) {

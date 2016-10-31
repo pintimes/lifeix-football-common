@@ -79,7 +79,8 @@ public class ImageUploadUtil {
 			}
 			return null;
 		}catch (Exception e) {
-			logger.error("图片上传失败，",e.getMessage());
+			logger.error("图片上传失败  ",e.getMessage());
+			e.printStackTrace();
 		}
 		return null;
 	}
