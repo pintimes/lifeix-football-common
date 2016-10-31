@@ -1,5 +1,7 @@
 package com.lifeix.football.common.util;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +80,11 @@ public class ImageUploadUtil {
 				return newImage;
 			}
 			return null;
-		}catch (Exception e) {
-			logger.error("图片上传失败  ",e.getMessage());
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
+			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
 			e.printStackTrace();
 		}
 		return null;
