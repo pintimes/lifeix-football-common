@@ -31,18 +31,19 @@ public class APIGatewayUtil {
 			throw new IllegalparamException("host is empty");
 		}
 		if (StringUtils.isEmpty(userId)) {
-			throw new IllegalparamException("userId is empty");
+			throw new IllegalparamException("consumer.userId is empty");
 		}
 		if (StringUtils.isEmpty(group)) {
 			throw new IllegalparamException("consumer.group is empty");
 		}
-		String custom_id=userId;
-		String username = userId;//username存储userId，consumer_id存储用户高频访问信息
+		String custom_id = userId;
+		String username = userId;
+		
 		/**
 		 * 检索Consumer
 		 */
 		Consumer consumer = retrieveConsumer(host, username);
-		if (consumer == null||StringUtils.isEmpty(consumer.getId())) {//用户不存在，创建新用户
+		if (consumer == null||StringUtils.isEmpty(consumer.getId())) {
 			/**
 			 * create Consumer to APIGateway /consumers/ PUT
 			 */
@@ -66,8 +67,6 @@ public class APIGatewayUtil {
 		addConsumerToUserGroup(host, kongId, group);
 		return key;
 	}
-	
-	
 
 	/**
 	 * 删除Consumer 同时关联删除Key以及Group等
@@ -144,7 +143,7 @@ public class APIGatewayUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Consumer retrieveConsumer(String host, String username) throws Exception {
+	private static Consumer retrieveConsumer(String host, String username) throws Exception {
 		String result = HttpUtil.sendGet(host + "/consumers/" + username);
 		if (StringUtils.isEmpty(result)) {
 			return null;
