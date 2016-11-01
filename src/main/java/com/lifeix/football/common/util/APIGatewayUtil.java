@@ -114,7 +114,7 @@ public class APIGatewayUtil {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("custom_id", custom_id);
 		try {
-			HttpUtil.sendPut(host + "/consumers/" + username,params);
+			HttpUtil.sendPatch(host + "/consumers/" + username,params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException("更新consumer失败  "+e.getMessage());

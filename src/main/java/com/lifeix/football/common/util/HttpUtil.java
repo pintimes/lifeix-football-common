@@ -19,6 +19,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -61,6 +62,20 @@ public class HttpUtil {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 发送http PATCH请求
+	 * @name sendPatch
+	 * @author xule
+	 * @version 2016年11月1日 下午2:29:28
+	 * @param 
+	 * @return String
+	 */
+	public static String sendPatch(String url,Map<String, String> map) throws Exception {
+		HttpPatch http=new HttpPatch(url);
+		http.setEntity(getEntity(map));
+		return sendHttp(http);
 	}
 	
 	public static String sendDelete(String url) throws Exception {
