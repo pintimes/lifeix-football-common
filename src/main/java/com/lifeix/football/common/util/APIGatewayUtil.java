@@ -191,10 +191,10 @@ public class APIGatewayUtil {
 //		HttpUtil.sendDelete(host + "/consumers/" + consumer.getId() + "/key-auth");
 //	}
 //
-	private static String retrieveConsumerKey(String host, String consumer_id) {
+	private static String retrieveConsumerKey(String host, String kongId) {
 		// {"data":[{"created_at":1463119688000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"56d99579e4a544a88b3ed34352724b25","id":"834819af-cddc-47b8-8e3c-642cce328987"},{"created_at":1463120654000,"consumer_id":"12148d96-695b-46d6-a4af-916e4ca47810","key":"2045e025e9994862ba12127fc60f3dc5","id":"10abb63a-c494-4480-a7d0-5cda69d440d5"}],"total":2}
 		try {
-			String result = HttpUtil.sendGet(host + "/consumers/" + consumer_id + "/key-auth");
+			String result = HttpUtil.sendGet(host + "/consumers/" + kongId + "/key-auth");
 			if (StringUtils.isEmpty(result)) {
 				return null;
 			}
