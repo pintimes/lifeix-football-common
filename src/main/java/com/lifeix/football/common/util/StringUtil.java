@@ -1,7 +1,11 @@
 package com.lifeix.football.common.util;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.util.StringUtils;
 
 /**
  * @author zengguangwei
@@ -41,6 +45,53 @@ public class StringUtil {
 			dest = m.replaceAll("");
 		}
 		return dest;
+	}
+	
+	public static String getFixlengthString(final String text,final int maxLength){
+		if (StringUtils.isEmpty(text)) {
+			return text;
+		}
+		int max= Math.max(1, maxLength);
+		//评论内容超出50个字符
+		int length = text.length();
+		length = length>max?max:length;
+		return text.substring(0,length);
+	}
+	
+	/**
+	 * 字符串转换成list
+	 * @description
+	 * @author zengguangwei 
+	 * @version 2016年11月7日下午6:28:54
+	 *
+	 * @param s
+	 * @param split
+	 * @return
+	 */
+	public static List<String> strToList(String s){
+		return strToList(s, ",");
+	}
+	
+	/**
+	 * 字符串转换成list
+	 * @description
+	 * @author zengguangwei 
+	 * @version 2016年11月7日下午6:28:54
+	 *
+	 * @param s
+	 * @param split
+	 * @return
+	 */
+	public static List<String> strToList(String s,String split){
+		if (StringUtils.isEmpty(s)) {
+			return null;
+		}
+		if (StringUtils.isEmpty(split)) {
+			return null;
+		}
+		String splitStr = split;
+		String[] temps = s.split(splitStr);
+		return Arrays.asList(temps);
 	}
 
 	public static void main(String[] args) {
