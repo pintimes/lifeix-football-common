@@ -2,22 +2,20 @@ package com.lifeix.football.common.model;
 
 import java.util.Map;
 
+/**
+ * 行为Link
+ * 
+ * @author zengguangwei
+ *
+ */
 public class Link {
+	// post,decision
+	private String type;
 
 	private String id;
-	
-	private String type;
-	
-	private String page;
-	
-	private String url;
-	
-	private String shareUrl;
 
-	private String name;
-	
-	private String image;
-	
+	private String url;
+
 	private Map<String, String> params;
 
 	public String getId() {
@@ -36,44 +34,12 @@ public class Link {
 		this.type = type;
 	}
 
-	public String getPage() {
-		return page;
-	}
-
-	public void setPage(String page) {
-		this.page = page;
-	}
-
 	public String getUrl() {
 		return url;
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getShareUrl() {
-		return shareUrl;
-	}
-
-	public void setShareUrl(String shareUrl) {
-		this.shareUrl = shareUrl;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public Map<String, String> getParams() {
@@ -83,5 +49,5 @@ public class Link {
 	public void setParams(Map<String, String> params) {
 		this.params = params;
 	}
-	
+
 }

@@ -1,5 +1,7 @@
 package com.lifeix.football.common.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.util.StringUtils;
 
 import com.lifeix.football.common.exception.AuthorizationException;
@@ -35,21 +37,28 @@ public class AuthorizationUtil {
 	 *
 	 * @param groups
 	 */
-	public static void adminAuth(String hearder_from) {
+	public static void adminAuth() {
 		// 只要是内网即可通过 如果通过Kong过来的header中from=kong
-		if (checkAdminAuth(hearder_from)) {
+		if (checkAdminAuth()) {
 			return;
 		}
 		throw new AuthorizationException();
 	}
 	
-	public static boolean checkAdminAuth(String hearder_from) {
+	public static boolean checkAdminAuth() {
+		HttpServletRequest currentRequest = BaseApi.getCurrentRequest();
+		if (currentRequest==null) {
+			return false;
+		}
 		// 只要是内网即可通过 如果通过Kong过来的header中from=kong
-		if (!StringUtils.isEmpty(hearder_from)) {
+		String header = currentRequest.getHeader("from");
+		if (!StringUtils.isEmpty(header)) {
 			return false;
 		}
 		return true;
 	}
+	
+	
 
 	/**
 	 * 
