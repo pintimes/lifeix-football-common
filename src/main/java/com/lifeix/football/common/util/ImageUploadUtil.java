@@ -44,7 +44,7 @@ public class ImageUploadUtil {
 			/**
 			 * 计算唯一的图片名
 			 */
-			String key=ImageUtil.calcETag(b)+ImageUtil.getSuffix(imgUrl);
+			String key=QiniuEtag.data(b)+ImageUtil.getSuffix(imgUrl);
 
 			/**
 			 * 判断是否需要加上图片名前缀

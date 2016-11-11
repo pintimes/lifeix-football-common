@@ -3,6 +3,8 @@
  */
 package com.lifeix.football.common.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -14,6 +16,8 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.util.StringUtils;
+
+import com.qiniu.common.Config;
 
 /**
  * @author xule
@@ -132,5 +136,4 @@ public class ImageUtil {
 		return etag;
 	}
 	/*********************************************************************************************************************************/
-
 }
