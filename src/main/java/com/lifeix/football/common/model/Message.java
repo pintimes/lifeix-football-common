@@ -1,31 +1,40 @@
 package com.lifeix.football.common.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Message {
 
 	private String id;
 
-	//未读，已读
+	// 未读，已读
 	private boolean read;
 
 	private User from;
 
 	private User to;
 
-	//属于哪个APP
+	// 属于哪个APP
 	private String app;
-
-	//什么类型的消息，APP系统自定义比如：裁判选派，通知，系统消息等等
-	private String type;
 	
-	private Label[] labels;
+	//类目Id，更多用于标示UI
+	private String categoryId;
+
+	// 什么类型的消息，APP系统自定义比如：裁判选派，通知，系统消息等等
+	private String type;
+
+	private List<Label> labels;
 
 	private Link link;
 
+	private String title;
+
 	private String content;
 
-	private String[] images;
+	private List<String> images;
+	
+	//参数，json类型的
+	private String params ;
 
 	private Date createTime;
 
@@ -61,28 +70,12 @@ public class Message {
 		this.content = content;
 	}
 
-	public String[] getImages() {
-		return images;
-	}
-
-	public void setImages(String[] images) {
-		this.images = images;
-	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-
-	public Label[] getLabels() {
-		return labels;
-	}
-
-	public void setLabels(Label[] labels) {
-		this.labels = labels;
 	}
 
 	public Link getLink() {
@@ -115,6 +108,46 @@ public class Message {
 
 	public void setRead(boolean read) {
 		this.read = read;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<Label> labels) {
+		this.labels = labels;
+	}
+
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
+	}
+
+	public String getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 
 }

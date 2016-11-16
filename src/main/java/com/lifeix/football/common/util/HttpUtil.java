@@ -203,6 +203,10 @@ public class HttpUtil {
 	}
 
 	private static UrlEncodedFormEntity getEntity(Map<String, String> map) throws UnsupportedEncodingException {
+		return getEntity("utf-8", map);
+	}
+	
+	private static UrlEncodedFormEntity getEntity(String encode,Map<String, String> map) throws UnsupportedEncodingException {
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		if (!CollectionUtils.isEmpty(map)) {
 			Set<String> set = map.keySet();
@@ -210,7 +214,7 @@ public class HttpUtil {
 				urlParameters.add(new BasicNameValuePair(key, map.get(key)));
 			}
 		}
-		return new UrlEncodedFormEntity(urlParameters, "utf-8");
+		return new UrlEncodedFormEntity(urlParameters, encode);
 	}
 
 	@SuppressWarnings("resource")
