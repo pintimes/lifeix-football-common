@@ -1,21 +1,28 @@
 package com.lifeix.football.common.model;
 
 public class Label {
-	
-	private String name;
-	
+
+	// 文本内容
+	private String text;
+
+	// 内容颜色：oxffff0000
 	private String color;
 
-	private String backgroud;
-	
+	// 背景颜色：oxffff0000
+	private String bgcolor;
+
+	// 背景图片
 	private String image;
 
-	public String getName() {
-		return name;
+	// 居中图标
+	private String icon;
+
+	public String getText() {
+		return text;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getColor() {
@@ -26,12 +33,12 @@ public class Label {
 		this.color = color;
 	}
 
-	public String getBackgroud() {
-		return backgroud;
+	public String getBgcolor() {
+		return bgcolor;
 	}
 
-	public void setBackgroud(String backgroud) {
-		this.backgroud = backgroud;
+	public void setBgcolor(String bgcolor) {
+		this.bgcolor = bgcolor;
 	}
 
 	public String getImage() {
@@ -41,5 +48,13 @@ public class Label {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 }

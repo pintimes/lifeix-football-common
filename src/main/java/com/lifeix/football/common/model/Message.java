@@ -10,9 +10,9 @@ public class Message {
 	// 未读，已读
 	private boolean read;
 
-	private User from;
+	private User sender;
 
-	private User to;
+	private User receiver;
 
 	// 属于哪个APP
 	private String app;
@@ -25,8 +25,6 @@ public class Message {
 
 	private List<Label> labels;
 
-	private Link link;
-
 	private String title;
 
 	private String content;
@@ -38,20 +36,20 @@ public class Message {
 
 	private Date createTime;
 
-	public User getFrom() {
-		return from;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setFrom(User from) {
-		this.from = from;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
-	public User getTo() {
-		return to;
+	public User getReceiver() {
+		return receiver;
 	}
 
-	public void setTo(User to) {
-		this.to = to;
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getType() {
@@ -76,14 +74,6 @@ public class Message {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-
-	public Link getLink() {
-		return link;
-	}
-
-	public void setLink(Link link) {
-		this.link = link;
 	}
 
 	public String getId() {
