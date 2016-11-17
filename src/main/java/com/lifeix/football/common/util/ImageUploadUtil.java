@@ -101,7 +101,7 @@ public class ImageUploadUtil {
 	 */
 	private static String getUploadToken(String fileHost,String imgName) {
 		try {
-			String url=fileHost+"/football/file/token/upload?key=admin&file_type=1&file_name="+imgName;
+			String url=fileHost+"/football/file/token/upload?file_type=1&file_name="+imgName;
 			HttpGet http = new HttpGet(url);
 			http.setHeader("Content-Type", "application/json");
 			String result = HttpUtil.sendHttp(http);
