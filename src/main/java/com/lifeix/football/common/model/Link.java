@@ -16,9 +16,17 @@ public class Link {
 	private String type;//跳转类型，app: app,html,h5,page   web:html,page
 	private String page;//跳转页面，app和web端返回不同的值，例如app端page=”coachlist_page”，web端page=”coach”
 	private String targetId;//目标页id，如资讯id
+	private String targetTitle;//目标页标题，如资讯标题
 	private String url;//链接页面地址
-	private String shareUrl;//链接页面分享地址
 	private Map<String, String> params;//额外的参数，根据项目不同有不同的需求
+
+	public String getTargetTitle() {
+		return targetTitle;
+	}
+
+	public void setTargetTitle(String targetTitle) {
+		this.targetTitle = targetTitle;
+	}
 
 	public String getPage() {
 		return page;
@@ -34,14 +42,6 @@ public class Link {
 
 	public void setTargetId(String targetId) {
 		this.targetId = targetId;
-	}
-
-	public String getShareUrl() {
-		return shareUrl;
-	}
-
-	public void setShareUrl(String shareUrl) {
-		this.shareUrl = shareUrl;
 	}
 
 	public String getType() {
