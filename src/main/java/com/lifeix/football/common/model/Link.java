@@ -18,7 +18,16 @@ public class Link {
 	private String targetId;//目标页id，如资讯id
 	private String targetTitle;//目标页标题，如资讯标题
 	private String url;//链接页面地址
+	private String urlScheme;//打开另一个app需要的参数
 	private Map<String, String> params;//额外的参数，根据项目不同有不同的需求
+
+	public String getUrlScheme() {
+		return urlScheme;
+	}
+
+	public void setUrlScheme(String urlScheme) {
+		this.urlScheme = urlScheme;
+	}
 
 	public String getTargetTitle() {
 		return targetTitle;
