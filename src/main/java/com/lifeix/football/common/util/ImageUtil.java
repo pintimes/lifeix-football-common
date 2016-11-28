@@ -6,6 +6,7 @@ package com.lifeix.football.common.util;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -54,6 +55,7 @@ public class ImageUtil {
 	}
 
 	/**
+	 * @throws Exception 
 	 * @name readData
 	 * @description 从图片地址读取图片内容到内存中
 	 * @author xule
@@ -62,18 +64,13 @@ public class ImageUtil {
 	 * @return byte[]
 	 * @throws
 	 */
-	public static byte[] readData(String url){
-		try {
+	public static byte[] readData(String url) throws Exception{
 			URL URL;
 			URL = new URL(url);
 			InputStream is = URL.openStream();
 			byte[] b = IOUtils.toByteArray(is);//获得图片
 			is.close();
 			return b;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null ;
 	}
 	
 }

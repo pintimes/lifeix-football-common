@@ -49,6 +49,9 @@ public class HttpUtil {
 	 * @throws
 	 */
 	public static boolean sendHead(String urlStr) throws Exception{
+		if (StringUtils.isEmpty(urlStr)) {
+			return false;
+		}
 		if (urlStr.startsWith("https")) {
 			throw new BusinessException("不支持的协议类型，请使用http");
 		}
