@@ -31,9 +31,8 @@ public class Message {
 
 	private List<String> images;
 	
-	//参数，json类型的
-	private String params ;
-
+	private OperAction action;
+	
 	private Date createTime;
 
 	public User getSender() {
@@ -124,20 +123,20 @@ public class Message {
 		this.images = images;
 	}
 
-	public String getParams() {
-		return params;
-	}
-
-	public void setParams(String params) {
-		this.params = params;
-	}
-
 	public String getCategoryId() {
 		return categoryId;
 	}
 
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public OperAction getAction() {
+		return action;
+	}
+
+	public void setAction(OperAction action) {
+		this.action = action;
 	}
 
 }
