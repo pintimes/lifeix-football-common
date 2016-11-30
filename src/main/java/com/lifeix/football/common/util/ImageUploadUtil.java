@@ -17,7 +17,7 @@ import com.qiniu.storage.UploadManager;
  */
 public class ImageUploadUtil {
 	private static Logger logger = LoggerFactory.getLogger(ImageUploadUtil.class);
-	
+
 	/**
 	 * @name uploadImg
 	 * @description 上传图片到七牛云
@@ -35,12 +35,86 @@ public class ImageUploadUtil {
 			logger.error("上传图片参数缺失！");
 			return null;
 		}
+		for (int i = 0; i < 3; i++) {//上传的图片和原图大小不同时进行3次尝试，如果3次上传结果和原图都不一样大，则返回null
+			try {
+				/**
+				 * 读取图片
+				 */
+				byte[] b = ImageUtil.readData(imgUrl);
+
+				/**
+				 * 计算唯一的图片名
+				 */
+				String key=QiniuEtag.data(b)+ImageUtil.getSuffix(imgUrl);
+
+				/**
+				 * 判断是否需要加上图片名前缀
+				 */
+				if (!StringUtils.isEmpty(imagePrefix)) {//图片前缀不为空，加上前缀
+					key=imagePrefix+key;
+				}
+
+				String newImage = imageHost+key;//生成图片完整路径
+				if (HttpUtil.sendHead(newImage)) {//图片存在，不需要重复上传
+					return newImage;
+				}
+
+				/**
+				 * 获得图片上传token
+				 */
+				String imgName=key;
+				String token = getUploadToken(fileHost,imgName);
+				if (StringUtils.isEmpty(token)) {
+					throw new BusinessException("图片上传token为空");
+				}
+				JSONObject uploadTokenJson= JSONObject.parseObject(token);//获得token
+				if (uploadTokenJson==null||uploadTokenJson.isEmpty()) {
+					throw new BusinessException("图片上传token为空");
+				}
+				String uploadToken = uploadTokenJson.getString("uptoken");
+
+				/**
+				 * 上传图片
+				 */
+				Response res = new UploadManager().put(b,key,uploadToken);//上传图片
+				if (res.statusCode==200) {//图片上传成功
+					byte[] b2 = ImageUtil.readData(newImage);//读取新图片
+					if (b.length==b2.length) {//旧图和新图大小相同，认为图片上传完整，返回新图地址
+						return newImage;
+					}
+				}
+			} catch (Exception e) {
+				logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * @name uploadImg
+	 * @description 上传图片到七牛云
+	 * @author xule
+	 * @version 2016年8月3日 上午11:15:01
+	 * @param 
+	 * @return String 上传到七牛云的图片名（不是图片完整路径，不包含图片主机地址）
+	 * @throws
+	 * 
+	 * 	app.imageHost=http://s.files.c-f.com/
+		app.imagePrefix=wemedia/images/
+	 */
+	public static String uploadImage2(String fileHost, String imageHost, String imagePrefix, String imgUrl) {
+		if (StringUtils.isEmpty(imgUrl)) {
+			logger.error("上传图片参数缺失！");
+			return null;
+		}
 		try {
 			/**
 			 * 读取图片
 			 */
 			byte[] b = ImageUtil.readData(imgUrl);
-			
+
 			/**
 			 * 计算唯一的图片名
 			 */
@@ -52,12 +126,12 @@ public class ImageUploadUtil {
 			if (!StringUtils.isEmpty(imagePrefix)) {//图片前缀不为空，加上前缀
 				key=imagePrefix+key;
 			}
-			
+
 			String newImage = imageHost+key;//生成图片完整路径
 			if (HttpUtil.sendHead(newImage)) {//图片存在，不需要重复上传
 				return newImage;
 			}
-			
+
 			/**
 			 * 获得图片上传token
 			 */
@@ -71,18 +145,17 @@ public class ImageUploadUtil {
 				throw new BusinessException("图片上传token为空");
 			}
 			String uploadToken = uploadTokenJson.getString("uptoken");
-			
+
 			/**
 			 * 上传图片
 			 */
 			Response res = new UploadManager().put(b,key,uploadToken);//上传图片
 			if (res.statusCode==200) {//图片上传成功
-				return newImage;
+				byte[] b2 = ImageUtil.readData(newImage);//读取新图片
+				if (b.length==b2.length) {//旧图和新图大小相同，认为图片上传完整，返回新图地址
+					return newImage;
+				}
 			}
-			return null;
-		} catch (NoSuchAlgorithmException e) {
-			logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
-			e.printStackTrace();
 		} catch (Exception e) {
 			logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
 			e.printStackTrace();

@@ -33,6 +33,7 @@ import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 
 public class HttpUtil {
+	public static final String CONTENT_TYPE="Content-Type";
 	public static final String CONTENT_TYPE_APPLICATION_JSON="application/json;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_TEXT="application/text;charset=UTF-8";
 	public static final String CONTENT_TYPE_APPLICATION_URLENCODED="application/x-www-form-urlencoded";
@@ -48,6 +49,9 @@ public class HttpUtil {
 	 * @throws
 	 */
 	public static boolean sendHead(String urlStr) throws Exception{
+		if (StringUtils.isEmpty(urlStr)) {
+			return false;
+		}
 		if (urlStr.startsWith("https")) {
 			throw new BusinessException("不支持的协议类型，请使用http");
 		}
@@ -117,7 +121,6 @@ public class HttpUtil {
 	 * @version 2016年10月26日 下午4:05:36
 	 * @param headers 请求头，为空或未设置content-type时，将自动设置content-type：application/json
 	 * @return String
-	 * @throws
 	 */
 	public static String sendPost(String url,Map<String, String> headers, Object entity) throws Exception {
 		if (StringUtils.isEmpty(url)) {
