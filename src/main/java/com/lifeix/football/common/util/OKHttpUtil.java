@@ -21,9 +21,10 @@ public class OKHttpUtil {
     public static final String FORM_MIME = "application/x-www-form-urlencoded";
 
     private static final OkHttpClient httpClient = new OkHttpClient();
+
     static {
 	httpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-	ConnectionPool connectionPool = new ConnectionPool(100, 5 * 60 * 1000);
+	ConnectionPool connectionPool = new ConnectionPool(32, 5 * 60 * 1000);
 	httpClient.setConnectionPool(connectionPool);
     }
 
