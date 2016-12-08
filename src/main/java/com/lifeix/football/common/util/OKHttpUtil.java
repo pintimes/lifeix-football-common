@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.util.StringUtils;
 
-import com.lifeix.football.common.exception.BaseException;
 import com.squareup.okhttp.ConnectionPool;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
@@ -42,23 +41,18 @@ public class OKHttpUtil {
 	return response.isSuccessful();
     }
 
-    public static Response get(String url, Map<String, Object> headers) {
+    public static Response get(String url, Map<String, Object> headers) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().get().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
 		requestBuilder.header(key, value.toString());
 	    });
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 
-    public static Response post(String url, Map<String, Object> headers, Map<String, Object> params) {
+    public static Response post(String url, Map<String, Object> headers, Map<String, Object> params) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
@@ -73,16 +67,11 @@ public class OKHttpUtil {
 	    });
 	    requestBuilder.post(builder.build());
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 
-    public static Response post(String url, Map<String, Object> headers, Object entity) {
+    public static Response post(String url, Map<String, Object> headers, Object entity) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
@@ -99,16 +88,11 @@ public class OKHttpUtil {
 	    }
 	    requestBuilder.post(RequestBody.create(mediaType, jsonStr));
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 
-    public static Response put(String url, Map<String, Object> headers, Map<String, Object> params) {
+    public static Response put(String url, Map<String, Object> headers, Map<String, Object> params) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
@@ -123,16 +107,11 @@ public class OKHttpUtil {
 	    });
 	    requestBuilder.put(builder.build());
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 
-    public static Response put(String url, Map<String, Object> headers, Object entity) {
+    public static Response put(String url, Map<String, Object> headers, Object entity) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
@@ -149,28 +128,18 @@ public class OKHttpUtil {
 	    }
 	    requestBuilder.put(RequestBody.create(mediaType, jsonStr));
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 
-    public static Response delete(String url, Map<String, Object> headers) {
+    public static Response delete(String url, Map<String, Object> headers) throws Exception {
 	Request.Builder requestBuilder = new Request.Builder().delete().url(url);
 	if (headers != null && headers.size() > 0) {
 	    headers.forEach((key, value) -> {
 		requestBuilder.header(key, value.toString());
 	    });
 	}
-	Response response = null;
-	try {
-	    response = httpClient.newCall(requestBuilder.build()).execute();
-	} catch (IOException e) {
-	    throw new BaseException(e.getMessage());
-	}
+	Response response = httpClient.newCall(requestBuilder.build()).execute();
 	return response;
     }
 }
