@@ -10,5 +10,9 @@ public class NotFindException extends BaseException {
     public NotFindException(String msg) {
         super(msg);
     }
+    
+    public NotFindException(String code, String msg) {
+		super(code,msg);
+	}
 
 }

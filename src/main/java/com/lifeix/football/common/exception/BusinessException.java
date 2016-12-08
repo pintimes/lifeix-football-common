@@ -7,5 +7,9 @@ public class BusinessException extends BaseException {
     public BusinessException(String msg) {
     	super(msg);
     }
+    
+    public BusinessException(String code, String msg) {
+		super(code,msg);
+	}
 
 }

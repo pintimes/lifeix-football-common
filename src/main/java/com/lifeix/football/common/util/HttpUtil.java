@@ -29,7 +29,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 
 public class HttpUtil {
@@ -52,11 +51,7 @@ public class HttpUtil {
 		if (StringUtils.isEmpty(urlStr)) {
 			return false;
 		}
-		if (urlStr.startsWith("https")) {
-			throw new BusinessException("不支持的协议类型，请使用http");
-		}
-		URL url;
-		url = new URL(urlStr);
+		URL url = new URL(urlStr);
 		HttpURLConnection conn=(HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("HEAD");
 		conn.connect(); 

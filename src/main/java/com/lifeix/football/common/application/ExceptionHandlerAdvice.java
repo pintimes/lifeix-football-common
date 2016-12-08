@@ -1,20 +1,16 @@
 package com.lifeix.football.common.application;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+
+import com.alibaba.fastjson.JSONObject;
 import com.lifeix.football.common.exception.AuthorizationException;
 import com.lifeix.football.common.exception.BaseException;
 import com.lifeix.football.common.exception.IllegalparamException;
@@ -61,11 +57,6 @@ public class ExceptionHandlerAdvice {
 	 */
 	@ExceptionHandler(NotFindException.class)
 	public void handleNotFindException(HttpServletResponse response, NotFindException e) throws IOException {
-		// response.setStatus(HttpStatus.NOT_FOUND.value());
-		// ServletOutputStream os = response.getOutputStream();
-		// os.write(e.getMessage().getBytes());
-		// os.flush();
-		// os.close();
 		handerException(response, HttpStatus.NOT_FOUND, e);
 	}
 
@@ -88,9 +79,9 @@ public class ExceptionHandlerAdvice {
 	@ExceptionHandler(Exception.class)
 	public void Exception(HttpServletResponse response, Exception e) throws IOException {
 		logger.error(e.getMessage(), e);
-		handerException(response, HttpStatus.INTERNAL_SERVER_ERROR, "服务器异常");
+		handerException(response, HttpStatus.INTERNAL_SERVER_ERROR, "","服务器异常");
 	}
-
+	
 	/**
 	 * 错误处理
 	 * @description
@@ -101,28 +92,25 @@ public class ExceptionHandlerAdvice {
 	 * @param status
 	 * @param message
 	 */
-	private void handerException(HttpServletResponse response, HttpStatus status, Exception e) {
-		logger.error(e.getMessage(), e);
-		handerException(response, status, e.getMessage());
-	}
-
-	/**
-	 * 错误处理
-	 * @description
-	 * @author zengguangwei 
-	 * @version 2016年10月10日下午5:18:15
-	 *
-	 * @param response
-	 * @param status
-	 * @param message
-	 */
-	private void handerException(HttpServletResponse response, HttpStatus status, String message) {
+	private void handerException(HttpServletResponse response, HttpStatus status, String code,String message) {
 		try {
 			response.setContentType("application/json");
-			response.sendError(status.value(), message);
+			response.setStatus(status.value());
+			
+			PrintWriter writer = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("code", code);
+			json.put("message", message);
+			writer.write(json.toJSONString());
+			writer.flush();
+			writer.close();
 		} catch (IOException ioE) {
 			logger.error("handerException", ioE);
 		}
+	}
+	
+	private void handerException(HttpServletResponse response, HttpStatus status, BaseException e) {
+		handerException(response, status, e.getCode(), e.getMessage());
 	}
 
 }

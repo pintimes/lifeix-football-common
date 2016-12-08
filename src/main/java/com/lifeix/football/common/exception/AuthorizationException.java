@@ -12,6 +12,10 @@ public class AuthorizationException extends BaseException {
         super(msg);
     }
     
+    public AuthorizationException(String code, String msg) {
+		super(code,msg);
+	}
+    
     public AuthorizationException() {
         super("don't have the right");
     }

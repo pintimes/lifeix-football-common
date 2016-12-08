@@ -10,5 +10,9 @@ public class IllegalparamException extends BaseException {
     public IllegalparamException(String msg) {
         super(msg);
     }
+    
+    public IllegalparamException(String code, String msg) {
+		super(code,msg);
+	}
 
 }
