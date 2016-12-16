@@ -86,5 +86,20 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeContent(String filepath, byte[] datas) {
+		try {
+			File file = new File(filepath);
+			file.delete();
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(datas);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

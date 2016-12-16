@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpParams;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -82,8 +83,26 @@ public class HttpUtil {
 		return sendHttp(http);
 	}
 	
+	public static String sendDelete(String url,Map<String, String> headers) throws Exception {
+		HttpDelete http = new HttpDelete(url);
+		Set<String> keySet = headers.keySet();
+		for (String key : keySet) {
+			http.setHeader(key, headers.get(key));
+		}
+		return sendHttp(http);
+	}
+	
 	public static String sendGet(String url) throws Exception {
 		HttpGet http = new HttpGet(url);
+		return sendHttp(http);
+	}
+	
+	public static String sendGet(String url,Map<String, String> headers) throws Exception {
+		HttpGet http = new HttpGet(url);
+		Set<String> keySet = headers.keySet();
+		for (String key : keySet) {
+			http.setHeader(key, headers.get(key));
+		}
 		return sendHttp(http);
 	}
 
@@ -234,5 +253,5 @@ public class HttpUtil {
 		}
 		return result.toString();
 	}
-	
+
 }
