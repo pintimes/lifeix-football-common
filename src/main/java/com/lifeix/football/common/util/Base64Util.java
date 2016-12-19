@@ -4,7 +4,7 @@ import org.springframework.util.StringUtils;
 
 public class Base64Util {
 	
-	public String encoding(String s){
+	public static String encoding(String s){
 		if (StringUtils.isEmpty(s)) {
 			return null;
 		}
