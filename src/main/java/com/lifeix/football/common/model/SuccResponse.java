@@ -2,39 +2,45 @@ package com.lifeix.football.common.model;
 
 public class SuccResponse {
 
-	public SuccResponse() {
-		super();
-	}
+    public static String MSG_UPDATE_SUCCESS = "修改成功！";
 
-	public SuccResponse(String message) {
-		super();
-		this.message = message;
-	}
+    public static String MSG_DELETE_SUCCESS = "删除成功！";
 
-	public SuccResponse(String code, String message) {
-		super();
-		this.code = code;
-		this.message = message;
-	}
+    public static String MSG_ADD_SUCCESS = "添加成功！";
 
-	private String code = "200";
+    public SuccResponse() {
+	super();
+    }
 
-	private String message;
+    public SuccResponse(String message) {
+	super();
+	this.message = message;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public SuccResponse(int code, String message) {
+	super();
+	this.code = code;
+	this.message = message;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    private int code = 200;
 
-	public String getMessage() {
-		return message;
-	}
+    private String message;
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public int getCode() {
+	return code;
+    }
+
+    public void setCode(int code) {
+	this.code = code;
+    }
+
+    public String getMessage() {
+	return message;
+    }
+
+    public void setMessage(String message) {
+	this.message = message;
+    }
 
 }
