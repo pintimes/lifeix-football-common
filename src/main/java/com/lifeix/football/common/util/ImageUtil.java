@@ -65,12 +65,12 @@ public class ImageUtil {
 	 * @throws
 	 */
 	public static byte[] readData(String url) throws Exception{
-		URL URL;
-		URL = new URL(url);
-		InputStream is = URL.openStream();
-		byte[] b = IOUtils.toByteArray(is);//获得图片
-		is.close();
-		return b;
+			URL URL;
+			URL = new URL(url);
+			InputStream is = URL.openStream();
+			byte[] b = IOUtils.toByteArray(is);//获得图片
+			is.close();
+			return b;
 	}
 	
 }

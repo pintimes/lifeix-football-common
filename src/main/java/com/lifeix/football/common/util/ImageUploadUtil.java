@@ -25,7 +25,7 @@ public class ImageUploadUtil {
 	 * @return String 上传到七牛云的图片名（不是图片完整路径，不包含图片主机地址）
 	 * @throws
 	 * 
-	 * 	app.imageHost=https://resources.c-f.com/
+	 * 	app.imageHost=http://s.files.c-f.com/
 		app.imagePrefix=wemedia/images/
 	 */
 	public static String uploadImage(String fileHost, String imageHost, String imagePrefix, String imgUrl) {
@@ -82,9 +82,8 @@ public class ImageUploadUtil {
 					}
 				}
 			} catch (Exception e) {
-				logger.error("图片上传失败  "+e.getMessage()+" imgUrl="+imgUrl);
+				logger.error("图片上传失败  "+e.getClass()+" "+e.getMessage()+" imgUrl="+imgUrl);
 				e.printStackTrace();
-				return null;
 			}
 		}
 		return null;
@@ -102,7 +101,9 @@ public class ImageUploadUtil {
 	private static String getUploadToken(String fileHost,String imgName) {
 		try {
 			String url=fileHost+"/football/file/token/upload?file_type=1&file_name="+imgName;
-			String result = HttpUtil.sendGet(url);
+			HttpGet http = new HttpGet(url);
+			http.setHeader("Content-Type", "application/json");
+			String result = HttpUtil.sendHttp(http);
 			if (StringUtils.isEmpty(result)) {
 				return null;
 			}
