@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -45,7 +46,6 @@ public class HttpUtil {
 	 * @version 2016年10月27日 下午2:01:47
 	 * @param 
 	 * @return boolean 链接可用返回true，否则返回false
-	 * @throws
 	 */
 	public static boolean sendHead(String urlStr) throws Exception{
 		if (StringUtils.isEmpty(urlStr)) {
@@ -57,7 +57,7 @@ public class HttpUtil {
 		conn.connect(); 
 		int resCode=conn.getResponseCode();
 		conn.disconnect();
-		if (resCode==404) {
+		if (resCode>=400) {
 			return false;
 		}
 		return true;
