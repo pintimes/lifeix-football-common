@@ -104,12 +104,13 @@ public class ExceptionHandlerAdvice {
 			writer.write(json.toJSONString());
 			writer.flush();
 			writer.close();
-		} catch (IOException ioE) {
-			logger.error("handerException", ioE);
+		} catch (Exception e) {
+			logger.error("handerException", e);
 		}
 	}
 	
 	private void handerException(HttpServletResponse response, HttpStatus status, BaseException e) {
+		logger.error(e.getMessage(), e);
 		handerException(response, status, e.getCode(), e.getMessage());
 	}
 
