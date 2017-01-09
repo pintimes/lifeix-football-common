@@ -30,4 +30,36 @@ public class UserConst {
 	
 	/*密码最小位数*/
 	public static final int PASSWORD_MIX_AMOUNT=8;
+	
+	/*用户角色枚举*/
+	public static enum Roles{
+		COMPETITION_MANAGER(1l, "赛事组织者"),
+		REFEREE_MANAGER(2l, "裁判管理员"),
+		REFEREE(3l, "裁判员"),
+		TEAM_MANAGER(4l, "球队领队"),
+		PLAYER(5l, "球员"),
+		COACH(6l, "教练员"),
+		STAFF(7l, "职员"),
+		MATCH_STAFF(8l, "比赛工作人员");
+		
+		private long id;  
+		private String value;  
+		private Roles(long id, String value) {
+			this.id = id;
+			this.value = value;
+		}
+		public String getValue() {  
+	        return value;  
+	    }  
+	    public long getId() {
+			return id;
+		}
+		public void setId(long id) {
+			this.id = id;
+		}
+		public void setValue(String value) {  
+	        this.value = value;  
+	    }  
+	}
+	
 }
