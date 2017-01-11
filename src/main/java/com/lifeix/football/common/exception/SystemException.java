@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
 import org.springframework.util.CollectionUtils;
 import com.lifeix.football.common.exception.BaseException;
 import com.lifeix.football.common.util.HttpUtil;
@@ -26,32 +28,32 @@ public class SystemException extends BaseException {
 	
 	public SystemException(String error,String mobile) {
 		super(error);
-		sendNotice("", mobile, error);
+		sendNotice("", mobile, error,null);
 	}
 	
-	public SystemException(String error,String system, String mobile) {
+	public SystemException(String error,String system, String mobile,Logger logger) {
 		super(error);
-		sendNotice(system, mobile, error);
+		sendNotice(system, mobile, error,logger);
 	}
 	
 	public SystemException(String error,String system, String mobile,String email) {
 		super(error);
-		sendNotice(system, mobile, error);
+		sendNotice(system, mobile, error,null);
 	}
 	
 	public SystemException(String error,String system, String mobile,String email,String msg) {
 		super(error);
-		sendNotice(system, mobile, msg);
+		sendNotice(system, mobile, msg,null);
 	}
 	
 	public SystemException(int code, String error,String system, String mobile,String email,String msg) {
 		super(String.valueOf(code),error);
-		sendNotice(system, mobile, msg);
+		sendNotice(system, mobile, msg,null);
 	}
 	
 	public SystemException(int code, String error, String system,String mobile,String email,String mobileMsg,String emailMsg) {
 		super(String.valueOf(code),error);
-		sendNotice(system, mobile, mobileMsg);
+		sendNotice(system, mobile, mobileMsg,null);
 	}
 
 	private static final Map<String,String> hostMap;
@@ -59,7 +61,7 @@ public class SystemException extends BaseException {
 	private static String link="";
 	static{
 		hostMap=new HashMap<>();
-		hostMap.put("dev", "http://127.0.0.1:8080/");
+		hostMap.put("dev", "http://54.223.127.33:8300/");
 		hostMap.put("qa", "http://54.223.127.33:8300/");
 		hostMap.put("pr", "https://api.c-f.com/");
 		keyMap=new HashMap<>();
@@ -84,7 +86,12 @@ public class SystemException extends BaseException {
 	}
 	
 	private SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-	private void sendNotice(String system,String mobile,String reason){
+	private void sendNotice(String system,String mobile,String reason,Logger logger){
+		logger.info("link="+link);
+		logger.info("system="+system);
+		logger.info("mobile="+mobile);
+		logger.info("reason="+reason);
+		
 		try {
 			Map<String, Object> map=new HashMap<>();
 			map.put("system", system);
