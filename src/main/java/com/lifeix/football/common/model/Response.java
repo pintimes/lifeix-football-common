@@ -14,10 +14,22 @@ public class Response<T> {
 	this.code = code;
 	this.message = message;
     }
+    
+	public Response(String code, String message, T data) {
+		super();
+		this.code = code;
+		this.message = message;
+		this.data = data;
+	}
+	
+	public Response(T data) {
+		super();
+		this.data = data;
+	}
 
-    private String code;
+	private String code="200";
 
-    private String message;
+    private String message="ok";
 
     private T data;
 

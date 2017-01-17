@@ -89,6 +89,26 @@ public class AuthorizationUtil {
 	}
 	
 	/**
+	 * 用户或管理员验证，并返回用户或管理员角色字符串：user/admin
+	 * @author xule
+	 * @version 2017年1月16日 上午11:58:19
+	 * @param 
+	 * @return String
+	 */
+	public static String userAdminAuth(String groups) {
+		if (StringUtils.isEmpty(groups)) {
+			throw new AuthorizationException();
+		}
+		if (groups.contains(ROLE_USER)) {
+			return ROLE_USER;
+		}
+		if (groups.contains(ROLE_ADMIN)) {
+			return ROLE_ADMIN;
+		}
+		throw new AuthorizationException();
+	}
+	
+	/**
 	 * 用户权限校验
 	 * @description
 	 * @author zengguangwei 
