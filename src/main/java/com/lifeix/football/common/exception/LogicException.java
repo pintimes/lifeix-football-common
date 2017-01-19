@@ -11,5 +11,4 @@ public class LogicException extends BaseException {
     public LogicException(String code, String msg) {
 	super(code, msg);
     }
-
 }

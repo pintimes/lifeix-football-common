@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,11 +95,16 @@ public class HttpUtil {
 	
 	public static String sendGet(String url) throws Exception {
 		HttpGet http = new HttpGet(url);
-		return sendHttp(http);
+		String sendHttp = sendHttp(http);
+		http.completed();
+		return sendHttp;
 	}
 	
 	public static String sendGet(String url,Map<String, String> headers) throws Exception {
 		HttpGet http = new HttpGet(url);
+		if (CollectionUtils.isEmpty(headers)) {
+			headers=new HashMap<>();
+		}
 		Set<String> keySet = headers.keySet();
 		for (String key : keySet) {
 			http.setHeader(key, headers.get(key));
@@ -251,6 +257,8 @@ public class HttpUtil {
 		while ((line = rd.readLine()) != null) {
 			result.append(line);
 		}
+		is.close();
+		rd.close();
 		return result.toString();
 	}
 

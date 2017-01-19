@@ -126,4 +126,15 @@ public class JSONUtils {
         return objectMapper.convertValue(map, clazz);
     }
 
+    /**
+     * 对象转换成map
+     * @author xule
+     * @version 2017年1月19日 上午11:02:58
+     * @param 
+     * @return Map<String,Object>
+     */
+    public static Map<String, Object> obj2map(Object obj) throws Exception{
+    	String json = obj2jsonNotNull(obj);
+    	return json2map(json);
+    }
 }
