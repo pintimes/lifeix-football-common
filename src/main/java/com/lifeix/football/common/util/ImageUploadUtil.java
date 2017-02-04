@@ -1,10 +1,8 @@
 package com.lifeix.football.common.util;
 
-import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-
 import com.alibaba.fastjson.JSONObject;
 import com.lifeix.football.common.exception.BusinessException;
 import com.qiniu.http.Response;
@@ -39,6 +37,9 @@ public class ImageUploadUtil {
 				 * 读取图片
 				 */
 				byte[] b = ImageUtil.readData(imgUrl);
+				if (b==null) {
+					throw new BusinessException("读取线上图片失败");
+				}
 
 				/**
 				 * 计算唯一的图片名
@@ -88,7 +89,109 @@ public class ImageUploadUtil {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * 图片上传方法2:<br/>增加图片地址有效性检查，如果图片存在重定向地址则替换图片地址为重定向地址；<br/>采用okhttp工具类发送请求；<br/>将图片保存在临时文件夹中后再上传；
+	 * <br/>判断原图和新图大小是否相同，相同时认为上传成功，否则失败；<br/>图片上传失败时返回null
+	 * @author xule
+	 * @version 2017年2月3日 下午2:16:45
+	 * @param 
+	 * @return String
+	 */
+	public static String uploadImage2(String fileHost, String imageHost, String imagePrefix, String imgUrl) {
+		if (StringUtils.isEmpty(imgUrl)) {
+			logger.error("上传失败，图片路径为空！");
+			return null;
+		}
+		/**
+		 * 图片有效性检查，有效时返回原图地址或重定向地址，无效时返回null
+		 */
+		String originImage=ImageUtil.availabilityCheck(imgUrl);
+		if (StringUtils.isEmpty(originImage)) {
+			logger.error("图片路径无效！图片地址:"+imgUrl);
+			return null;
+		}
+		/**
+		 * 获得原图大小
+		 */
+		int originSize=ImageUtil.getImageSize(originImage);
+		if (originSize==-1) {
+			logger.error("获取图片大小失败，图片地址："+originImage);
+			return null;
+		}
+		try {
+			/**
+			 * 读取图片
+			 */
+			String filePath = ImageUtil.writeAndGetImagePath(originImage);
+			if (StringUtils.isEmpty(filePath)) {
+				logger.error("获取图片并写入临时文件失败，图片地址："+originImage);
+				return null;
+			}
+			
+			/**
+			 * 计算唯一的图片名
+			 */
+			String key = QiniuEtag.file(filePath)+ImageUtil.getSuffix(originImage);
+			
+			/**
+			 * 判断是否需要加上图片名前缀
+			 */
+			if (!StringUtils.isEmpty(imagePrefix)) {//图片前缀不为空，加上前缀
+				key=imagePrefix+key;
+			}
+			
+			String newImage = imageHost+key;//生成图片完整路径
+			/**
+			 * 判断图片是否已经上传过
+			 */
+			if (OKHttpUtil.head(newImage)) {//图片存在，不需要重复上传
+				return newImage;
+			}
+			/**
+			 * 获得图片上传token
+			 */
+			String imgName=key;
+			String token = getUploadToken(fileHost,imgName);
+			if (StringUtils.isEmpty(token)) {
+				logger.error("图片上传token为空");
+				return null;
+			}
+			JSONObject uploadTokenJson= JSONObject.parseObject(token);//获得token
+			if (uploadTokenJson==null||uploadTokenJson.isEmpty()) {
+				logger.error("从文件服务获取图片上传token失败");
+				return null;
+			}
+			String uploadToken = uploadTokenJson.getString("uptoken");
+			if (StringUtils.isEmpty(uploadToken)) {
+				logger.error("图片上传token为空");
+				return null;
+			}
+			/**
+			 * 上传图片
+			 */
+			Response res=null;
+			res = new UploadManager().put(filePath, key, uploadToken);
+			if (res==null) {
+				logger.error("上传图片失败");
+				return null;
+			}
+			if (res.statusCode==200) {//图片上传成功
+				int newSize=ImageUtil.getImageSize(newImage);
+				if (newSize==-1) {
+					logger.error("获取上传后的图片大小失败，图片地址："+newImage);
+					return null;
+				}
+				if (originSize==newSize) {//旧图和新图大小相同，认为图片上传完整，返回新图地址
+					return newImage;
+				}
+			}
+		} catch (Exception e) {
+			logger.error("上传失败，"+e.getMessage());
+		} 
+		return null;
+	}
+	
 	/**
 	 * @name getToken
 	 * @description
@@ -100,10 +203,8 @@ public class ImageUploadUtil {
 	 */
 	private static String getUploadToken(String fileHost,String imgName) {
 		try {
-			String url=fileHost+"/football/file/token/upload?file_type=1&file_name="+imgName;
-			HttpGet http = new HttpGet(url);
-			http.setHeader("Content-Type", "application/json");
-			String result = HttpUtil.sendHttp(http);
+			String url=fileHost+"/football/file/token/upload?key=visitor&file_type=1&file_name="+imgName;
+			String result = HttpUtil.sendGet(url);
 			if (StringUtils.isEmpty(result)) {
 				return null;
 			}
