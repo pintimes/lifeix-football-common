@@ -100,6 +100,7 @@ public class FileUploadUtil {
 			 * 判断文件是否已经上传过
 			 */
 			if (OKHttpUtil.head(newfile)) {//文件存在，不需要重复上传
+				logger.info("文件已存在，不需要重复上传，文件地址："+fileUrl);
 				return newfile;
 			}
 			/**
@@ -138,6 +139,7 @@ public class FileUploadUtil {
 				 * 比较原图和新图大小是否相同，相同时认为文件上传完整，返回新图地址
 				 */
 				if ((originSize!=-1&&originSize==newSize)||(originSize==-1)) {
+					logger.info("文件上传成功，文件地址："+fileUrl);
 					return newfile;
 				}
 			}
