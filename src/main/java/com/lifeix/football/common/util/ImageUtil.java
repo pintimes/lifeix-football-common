@@ -3,6 +3,7 @@
  */
 package com.lifeix.football.common.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,6 +14,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import com.lifeix.football.common.exception.BusinessException;
+import com.squareup.okhttp.Response;
 
 /**
  * @author xule
@@ -32,6 +36,9 @@ public class ImageUtil {
 	 * @throws
 	 */
 	public static String getSuffix(String imgUrl){
+		if (StringUtils.isEmpty(imgUrl)) {
+			return null;
+		}
 		String image=imgUrl;
 		int index1 = image.indexOf("?");
 		if (index1>=0) {
@@ -83,43 +90,25 @@ public class ImageUtil {
 		}
 		return FileUtil.writeTempFile(url);
 	}
-	
+
 	/**
-	 * 图片有效性检查，有效时返回原图地址或重定向地址，无效时返回null
+	 * 图片有效性检查，有效时返回true，否则返回false
 	 * @author xule
 	 * @version 2017年2月3日 上午10:44:45
 	 * @param 
 	 * @return String
 	 */
-	public static String availabilityCheck(String url) {
-		boolean head = OKHttpUtil.head(url);
-		/**
-		 * 检查图片地址是否有效
-		 */
-		if (!head) {
-			logger.error("图片路径无效，url="+url);
-			return null;
-		}
-		/**
-		 * 判断图片地址是否需要重定向，如果需要重定向则返回重定向的图片地址（Response Headers Location）
-		 */
-		HttpURLConnection conn=null;
+	public static boolean availabilityCheck(String url) {
 		try {
-			conn = (HttpURLConnection)new URL(url).openConnection();
-			if (conn==null) {
-				return null;
+			Response response = OKHttpUtil.get(url, null);
+			int code = response.code();
+			if (code<400&&code>=200) {
+				return true;
 			}
-			String location = conn.getHeaderField("Location");
-			if (StringUtils.isEmpty(location)) {
-				return url;
-			}
-			return location;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			conn.disconnect();
 		}
-		return null;
+		return false;
 	}
 
 	/**
@@ -129,19 +118,40 @@ public class ImageUtil {
 	 * @param 
 	 * @return int
 	 */
-	public static int getImageSize(String url) {
+	public static long getImageSize(String url) {
 		HttpURLConnection conn=null;
+		try {
+			conn = (HttpURLConnection)new URL(url).openConnection();
+			if (conn==null) {
+				return -1;
+			}
+			long contentLength = conn.getContentLengthLong();
+			return contentLength;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (conn!=null) {
+				conn.disconnect();
+			}
+		}
+		return -1;
+	}
+	
+	public static void main(String[] args) {
+		HttpURLConnection conn=null;
+		String url="http://123.jpg";
 		try {
 			conn = (HttpURLConnection)new URL(url).openConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (conn==null) {
-			return -1;
+		System.out.println(conn);
+		try {
+			System.out.println(conn.getResponseMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		int contentLength = conn.getContentLength();
-		conn.disconnect();
-		return contentLength;
+		
 	}
 	
 }

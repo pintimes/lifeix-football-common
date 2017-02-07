@@ -9,16 +9,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
 import org.springframework.util.StringUtils;
 
+import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 
 public class FileUtil {
-
 	/**
 	 * 
 	 * @param filepath   xx.text
@@ -139,7 +140,6 @@ public class FileUtil {
         	URL url = new URL(fileUrl);
             //connect
             URLConnection urlConn = url.openConnection();
-
             //get inputstream from connection
             is = urlConn.getInputStream();               
             fos = new FileOutputStream(filepath);
