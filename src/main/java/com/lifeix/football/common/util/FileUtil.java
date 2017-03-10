@@ -33,7 +33,6 @@ public class FileUtil {
 			String line;
 			while ((line = br.readLine()) != null) {
 				stringBuilder.append(line).append("\n");
-//				stringBuilder.append(line);
 			}
 			br.close();
 			return stringBuilder.toString();

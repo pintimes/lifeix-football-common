@@ -1,9 +1,6 @@
 package com.lifeix.football.common.util;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -12,7 +9,6 @@ import com.lifeix.football.common.exception.BusinessException;
 import com.lifeix.football.common.exception.IllegalparamException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
-import com.squareup.okhttp.ResponseBody;
 
 /**
  * @author xule
@@ -110,20 +106,4 @@ public class ImageUploadUtil {
 		}
 		return null;
 	}
-	
-	public static void main(String[] args) {
-		com.squareup.okhttp.Response response = null;
-		try {
-			response = OKHttpUtil.get("http://photo.l99.com/common/645/1477359619752_uh6bn0.gif", null);
-		} catch (Exception e) {
-		}
-		System.out.println(response);
-		System.out.println(response.code());
-		try {
-			System.out.println(response.body().bytes().length);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

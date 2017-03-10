@@ -21,7 +21,7 @@ public class UserConst {
 	public static final int GENDER_FEMALE = 2;
 	
 	/*注册用户信息来源*/
-	public static final String USER_REGESTER_SOURCE_CF = "c-f";
+	public static final String USER_REGESTER_SOURCE_CF = "cf";
 	public static final String USER_REGESTER_SOURCE_CFCS = "competition";
 	
 	/*注册用户组*/

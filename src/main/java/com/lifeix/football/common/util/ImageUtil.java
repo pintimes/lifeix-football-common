@@ -33,7 +33,6 @@ public class ImageUtil {
 	 * @version 2016年10月27日 上午11:50:31
 	 * @param 
 	 * @return String
-	 * @throws
 	 */
 	public static String getSuffix(String imgUrl){
 		if (StringUtils.isEmpty(imgUrl)) {
@@ -136,22 +135,4 @@ public class ImageUtil {
 		}
 		return -1;
 	}
-	
-	public static void main(String[] args) {
-		HttpURLConnection conn=null;
-		String url="http://123.jpg";
-		try {
-			conn = (HttpURLConnection)new URL(url).openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(conn);
-		try {
-			System.out.println(conn.getResponseMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
 }
