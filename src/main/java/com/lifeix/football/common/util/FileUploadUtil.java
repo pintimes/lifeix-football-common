@@ -152,9 +152,14 @@ public class FileUploadUtil {
 	private static String getFileExtension(String fileType, String fileUrl) throws Exception{
 		String contentType = URLConnection.guessContentTypeFromName(fileUrl);
 		if (StringUtils.isEmpty(contentType)) {
-			contentType=URLConnection.guessContentTypeFromStream(new URL(fileUrl).openStream());
-			if (StringUtils.isEmpty(contentType)) {
-				return null;
+			InputStream is=null;
+			try {
+				is = new URL(fileUrl).openStream();
+				return URLConnection.guessContentTypeFromStream(is);
+			} finally {
+				if (is!=null) {
+					is.close();
+				}
 			}
 		}
 		String[] splits = contentType.split("/");
