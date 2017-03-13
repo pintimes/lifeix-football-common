@@ -93,6 +93,7 @@ public class FileUploadUtil {
         	 */
         	Response res=new UploadManager().put(filepath, newFileKey, uploadToken);
 			if (res!=null&&res.statusCode==200) {//文件上传成功
+				logger.info("文件上传成功！原文件地址："+fileUrl);
 				return newFileUrl;
 			}
 			throw new Exception(res.error);
@@ -133,10 +134,7 @@ public class FileUploadUtil {
 			filePrefix="";
 		}
 		String newFileKey=filePrefix+MD5Util.getMD5(fileUrl);
-		long start2 = System.currentTimeMillis();
 		String fileExtension = getFileExtension(fileType, fileUrl);
-		long end2 = System.currentTimeMillis();
-		System.out.println("获取文件扩展名耗时："+(end2-start2)+"ms");
 		if (!StringUtils.isEmpty(fileExtension)) {
 			newFileKey+=fileExtension;
 		}
