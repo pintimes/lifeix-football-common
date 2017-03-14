@@ -234,7 +234,7 @@ public class FileUploadUtil {
 	}
 
 	/**
-	 * 将制定链接的文件写入临时文件夹中
+	 * 将指定链接的文件写入临时文件夹中
 	 * @author xule
 	 * @version 2017年3月10日  下午7:49:24
 	 * @param 
@@ -264,18 +264,18 @@ public class FileUploadUtil {
 			while ((length = is.read(buffer)) > 0) {
 				fos.write(buffer, 0, length);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new Exception("文件写入失败，"+e.getMessage());
 		} finally {
-			if (body!=null) {
-				body.close();
-			}
 			if (is != null) {
         		is.close();
             }
             if (fos != null) {
 				fos.close();
             }
+            if (body!=null) {
+				body.close();
+			}
 		}          
 		return filepath;
 	}

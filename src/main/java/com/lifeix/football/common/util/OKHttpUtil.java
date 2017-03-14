@@ -38,7 +38,13 @@ public class OKHttpUtil {
 	} catch (IOException e) {
 	    return false;
 	}
-	return response.isSuccessful();
+	boolean result = response.isSuccessful();
+	try {
+		response.body().close();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	return result;
     }
 
     public static Response get(String url, Map<String, Object> headers) throws Exception {
