@@ -73,7 +73,7 @@ public class FileUploadUtil {
 		/**
 		 * 判断文件是否已经上传过，如果已经上传过，则直接返回新文件地址，否则读取文件并进行上传
 		 */
-		if (HttpUtil.sendHead(newFileUrl)) {//文件存在，不需要重复上传
+		if (OKHttpUtil.head(newFileUrl)) {//文件存在，不需要重复上传
 			logger.info("文件已存在，不需要重复上传！文件原地址："+fileUrl+"，文件新地址："+newFileUrl);
 			return newFileUrl;
 		}
