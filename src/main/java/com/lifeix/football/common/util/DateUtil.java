@@ -3,7 +3,6 @@ package com.lifeix.football.common.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -31,12 +30,18 @@ public class DateUtil {
 		return format.format(d);
 	}
 	
+	/**
+	 * 将时间转换为"协调世界时"
+	 */
 	public static String toUTCStr(Date d) {
 		DateFormat format = new SimpleDateFormat(UTC_FORMAT_DEFAULT);
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return format.format(d);
 	}
 	
+	/**
+	 * @param dateStr 如： Thu Mar 16 14:54:41 CST 2017
+	 */
 	public static Date engToDate(String dateStr) {
 		DateFormat format = new SimpleDateFormat(ENG_FORMAT_DEFAULT,Locale.ENGLISH);
 		try {
@@ -45,26 +50,6 @@ public class DateUtil {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public static void main(String[] args) throws ParseException {
-//		String dateStr = "Thu Jun 30 09:15:27 +0800 2016";
-//		SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss ZZZZ yyyy",Locale.ENGLISH);
-		
-//		String dateStr = "星期四 一月 15 08:42:01 +0800 1970";
-//		DateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss ZZZZ yyyy");
-		// Use UTC as the default time zone.
-		
-//		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-//		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-//		Date date = dateFormat.parse(dateStr);
-		
-//		SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss ZZZZ yyyy",Locale.ENGLISH);
-//		String format2 = sdf.format(new Date(1467249327000l));
-//		System.out.println(format2);
-		
-		Date date = engToDate("Sun Oct 16 12:47:13 +0800 2016");
-		System.out.println(DateUtil.toTimeStr(date));
 	}
 
 }

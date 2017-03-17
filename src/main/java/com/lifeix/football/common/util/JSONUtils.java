@@ -88,10 +88,20 @@ public class JSONUtils {
      */
     public static <T> Map<String, T> json2map(String jsonStr, Class<T> clazz)
             throws JsonParseException, JsonMappingException, IOException {
+    	Map<String, T> result = new HashMap<String, T>();
+    	if (Boolean.class.equals(clazz)||Byte.class.equals(clazz)||Character.class.equals(clazz)||Short.class.equals(clazz)||
+    		Integer.class.equals(clazz)||Long.class.equals(clazz)||Float.class.equals(clazz)||Double.class.equals(clazz)||String.class.equals(clazz)) {
+    		Map<String, T> map = objectMapper.readValue(jsonStr,
+                    new TypeReference<T>() {
+                    });
+            for (Entry<String, T> entry : map.entrySet()) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+            return result;
+		}
         Map<String, Map<String, Object>> map = objectMapper.readValue(jsonStr,
                 new TypeReference<Map<String, T>>() {
                 });
-        Map<String, T> result = new HashMap<String, T>();
         for (Entry<String, Map<String, Object>> entry : map.entrySet()) {
             result.put(entry.getKey(), map2pojo(entry.getValue(), clazz));
         }

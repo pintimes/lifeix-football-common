@@ -42,7 +42,7 @@ public class PasswordHasher {
         private static final PasswordHasher INSTANCE = new PasswordHasher();
     }
 
-    private PasswordHasher() {
+    public PasswordHasher() {
         secureRandom = new SecureRandom();
         try {
             messageDigest = MessageDigest.getInstance("SHA-512");

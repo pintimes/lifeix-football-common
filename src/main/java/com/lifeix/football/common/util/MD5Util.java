@@ -25,19 +25,5 @@ public class MD5Util {
 		}
 		return null;
 	}
-	
-//	public static void main(String[] args) {
-//		String string1 = "212121";
-//		String string2 = string1;
-//		String string3 = new String("212121");
-//		String string4 = new String(string2);
-//		String string5 = "21212322222";
-//		
-//		System.out.println(MD5Util.getMD5(string1));
-//		System.out.println(MD5Util.getMD5(string2));
-//		System.out.println(MD5Util.getMD5(string3));
-//		System.out.println(MD5Util.getMD5(string4));
-//		System.out.println(MD5Util.getMD5(string5));
-//	}
 
 }

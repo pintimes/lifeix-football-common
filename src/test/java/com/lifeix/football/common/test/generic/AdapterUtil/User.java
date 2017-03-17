@@ -1,10 +1,6 @@
-package com.lifeix.football.common.model;
+package com.lifeix.football.common.test.generic.AdapterUtil;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-
 	private String id;
 	private String nickname;
 	private String avatar;
@@ -32,16 +28,15 @@ public class User {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-
+	
 	public User() {
 		super();
 	}
-
+	
 	public User(String id, String nickname, String avatar) {
 		super();
 		this.id = id;
 		this.nickname = nickname;
 		this.avatar = avatar;
 	}
-
 }

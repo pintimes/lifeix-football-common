@@ -24,10 +24,10 @@ import com.squareup.okhttp.ResponseBody;
  */
 public class FileUploadUtil {
 	private static Logger logger = LoggerFactory.getLogger(FileUploadUtil.class);
-	private static final String FILETYPE_ALL="all";
-	private static final String FILETYPE_IMAGE="image";
-	private static final String FILETYPE_VIDEO="video";
-	private static final String FILETYPE_AUDIO="audio";
+	public static final String FILETYPE_ALL="all";
+	public static final String FILETYPE_IMAGE="image";
+	public static final String FILETYPE_VIDEO="video";
+	public static final String FILETYPE_AUDIO="audio";
 
 	/**
 	 * 通用的文件上传方法，抓取链接文件并上传到七牛，支持图片、视频、音频等任意文件类型

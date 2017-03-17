@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -27,7 +26,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -59,7 +57,7 @@ public class HttpUtil {
 		conn.connect(); 
 		int resCode=conn.getResponseCode();
 		conn.disconnect();
-		if (resCode==404) {
+		if (resCode>=400) {
 			return false;
 		}
 		return true;

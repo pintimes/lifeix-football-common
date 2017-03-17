@@ -14,6 +14,9 @@ import org.springframework.util.StringUtils;
 public class StringUtil {
 
 	public static String firstUpcase(String name) {
+		if (StringUtils.isEmpty(name)) {
+			return name;
+		}
 		String first = name.substring(0, 1);
 		return name.replaceFirst(first, first.toUpperCase());
 	}
@@ -40,7 +43,7 @@ public class StringUtil {
 	public static String replaceBlank(String str) {
 		String dest = "";
 		if (str != null) {
-			Pattern p = Pattern.compile("\\s*|t|r|n");
+			Pattern p = Pattern.compile("\\s");//\\s
 			Matcher m = p.matcher(str);
 			dest = m.replaceAll("");
 		}
@@ -93,13 +96,26 @@ public class StringUtil {
 		String[] temps = s.split(splitStr);
 		return Arrays.asList(temps);
 	}
-
-	public static void main(String[] args) {
-//		String content = FileUtil.readFileContent("d:/shujutongji - 副本.html");
-		String content = FileUtil.readFileContent("D:/chuchangjilu - 副本.html");
-		System.out.println(content);
-		System.out.println("-------------------------------");
-		String result = replaceRow(content);
-		System.out.println(result);
+	
+	/**
+	 * 生成指定长度的随机字符串
+	 * @author xule
+	 * @version 2017年3月16日  上午11:02:17
+	 * @param 
+	 * @return length>0时返回长度为length的随机字符串，否则返回空字符串""
+	 */
+	public static String getRandomString(int length){
+		StringBuilder builder=new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			builder.append((char)(Math.random()*93+33));//ASCII码表中可见字符范围为32~126，排除32的空格，因此字符范围为33~126
+		}
+		return builder.toString();
 	}
+	public static void main(String[] args) {
+		String randomString = getRandomString(0);
+		System.out.println("----"+randomString);
+		randomString = getRandomString(10);
+		System.out.println("----"+randomString);
+	}
+	
 }

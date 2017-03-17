@@ -16,11 +16,9 @@ public class MapUtil {
 		return result ;
 	}
 
-	public static boolean isEmpty(Map<String, String> map) {
-		if (map == null) {
-			return true;
-		}
-		return map.size()==0;
+	
+	public static <K, V> boolean isEmpty(Map<K, V> map) {
+		return map == null||map.size()==0;
 	}
 	
 }

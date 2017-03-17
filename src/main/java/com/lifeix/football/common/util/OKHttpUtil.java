@@ -14,6 +14,9 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+/**
+ * 使用Response后必须关闭body,否则会造成网络阻塞    http://square.github.io/okhttp/3.x/okhttp/
+ */
 public class OKHttpUtil {
 
     public static final String JSON_MIME = "application/json";

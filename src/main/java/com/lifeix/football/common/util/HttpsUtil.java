@@ -197,25 +197,4 @@ public class HttpsUtil {
     	conn.connect();  
     	return getResult(conn);
     }
-    
-//    /**
-//     * @name sendDelete
-//     * @description 发送https的delete请求
-//     * @author xule
-//     * @version 2016年9月27日 下午4:46:13
-//     * @param link 请求地址，也就是url
-//     * 		  param 请求参数，用'&'拼接成字符串（应该有更好的方式，但是我还没有找到）
-//     * @return String 请求失败返回null
-//     * @throws Exception
-//     */
-//    public static String sendDelete(String link, String param) throws Exception{
-//    	URL url = new URL(link+"?"+param);
-//    	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-//    	conn.setSSLSocketFactory(getSSLContext().getSocketFactory());
-//    	conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-//    	conn.setRequestMethod("DELETE");
-//    	conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");  
-//    	conn.connect();  
-//    	return getResult(conn);
-//    }
 }
