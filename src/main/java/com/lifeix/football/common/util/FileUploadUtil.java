@@ -249,10 +249,10 @@ public class FileUploadUtil {
         	if (headResponse==null) {
         		throw new Exception("OKHttpUtil.get=null，文件地址："+fileUrl);
 			}
+        	body = headResponse.body();
         	if (!headResponse.isSuccessful()) {
 				throw new Exception("无效的图片地址："+fileUrl);
 			}
-        	body = headResponse.body();
         	if (body==null) {
 				throw new Exception("获取文件http请求返回体失败，文件地址："+fileUrl);
 			}
