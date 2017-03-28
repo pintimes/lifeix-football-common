@@ -111,11 +111,4 @@ public class StringUtil {
 		}
 		return builder.toString();
 	}
-	public static void main(String[] args) {
-		String randomString = getRandomString(0);
-		System.out.println("----"+randomString);
-		randomString = getRandomString(10);
-		System.out.println("----"+randomString);
-	}
-	
 }
