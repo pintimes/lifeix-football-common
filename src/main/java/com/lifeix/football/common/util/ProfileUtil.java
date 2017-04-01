@@ -36,4 +36,17 @@ public class ProfileUtil {
         }
         return new String[] { "common", "system",envorment };
     }
+    
+    public static String getEnvironment(){
+    	String os = EnvironmentUtil.getOS();
+        if (os.indexOf("Windows") != -1) {
+            return "dev";
+        }
+        Map<String, String> sysEnvs = EnvironmentUtil.getSysEnvs();
+        String environment = sysEnvs.get("PROFILE_ENV");
+        if (StringUtils.isEmpty(environment)) {
+        	return "qa";
+        }
+		return environment;
+    }
 }
