@@ -1,6 +1,10 @@
 package com.lifeix.football.common.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
+import java.util.Properties;
 
 import org.springframework.util.StringUtils;
 
@@ -49,4 +53,27 @@ public class ProfileUtil {
         }
 		return environment;
     }
+    
+    public static String getConfigParam(String key){
+		URL url = Thread.currentThread().getContextClassLoader().getResource("application-"+getEnvironment()+".properties");
+		InputStream inStream=null;
+		try {
+			Properties prop = new Properties();  
+			inStream = url.openStream();
+			prop.load(inStream);  
+			String value = prop.getProperty(key); 
+			return value;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (inStream!=null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 }

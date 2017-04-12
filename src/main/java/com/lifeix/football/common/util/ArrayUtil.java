@@ -11,28 +11,28 @@ import java.util.List;
 public class ArrayUtil {
 
 	public static boolean isEmpty(boolean[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(char[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(byte[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(short[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(int[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(long[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(float[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
 	public static boolean isEmpty(double[] arrays) {
-		return arrays.length == 0;
+		return arrays == null || arrays.length == 0;
 	}
     public static <T> boolean isEmpty(T[] arrays) {
         return arrays == null || arrays.length == 0;
