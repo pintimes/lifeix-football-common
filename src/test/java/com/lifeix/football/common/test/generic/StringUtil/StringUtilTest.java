@@ -24,6 +24,7 @@ public class StringUtilTest {
 		Assert.assertEquals("1test",string2);
 	}
 	
+	
 	@Test
 	public void replaceRowTest(){
 		String replaceRow = StringUtil.replaceRow("12\n3n\r\t");
