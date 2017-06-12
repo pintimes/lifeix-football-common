@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.squareup.okhttp.ConnectionPool;
@@ -101,23 +102,24 @@ public class OKHttpUtil {
 	return response;
     }
 
-    public static Response put(String url, Map<String, Object> headers, Map<String, Object> params) throws Exception {
-	Request.Builder requestBuilder = new Request.Builder().url(url);
-	if (headers != null && headers.size() > 0) {
-	    headers.forEach((key, value) -> {
-		requestBuilder.header(key, value.toString());
-	    });
-	}
-	requestBuilder.header("Content-Type", FORM_MIME);
-	if (params != null && params.size() > 0) {
-	    FormEncodingBuilder builder = new FormEncodingBuilder();
-	    params.forEach((key, value) -> {
-		builder.add(key, value.toString());
-	    });
-	    requestBuilder.put(builder.build());
-	}
-	Response response = httpClient.newCall(requestBuilder.build()).execute();
-	return response;
+    public static Response put(String url, Map<String, Object> headers, Map<String, Object> params)
+            throws Exception {
+        Request.Builder requestBuilder = new Request.Builder().url(url);
+        if (headers != null && headers.size() > 0) {
+            headers.forEach((key, value) -> {
+                requestBuilder.header(key, value.toString());
+            });
+        }
+        requestBuilder.header("Content-Type", FORM_MIME);
+        FormEncodingBuilder builder = new FormEncodingBuilder();
+        if (!CollectionUtils.isEmpty(params)) {
+            params.forEach((key, value) -> {
+                builder.add(key, value.toString());
+            });
+        }
+        requestBuilder.put(builder.build());
+        Response response = httpClient.newCall(requestBuilder.build()).execute();
+        return response;
     }
 
     public static Response put(String url, Map<String, Object> headers, Object entity) throws Exception {

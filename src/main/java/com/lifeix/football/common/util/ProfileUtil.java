@@ -26,7 +26,7 @@ public class ProfileUtil {
         /**
          * 开发环境
          */
-        if (os.indexOf("Windows") != -1) {
+        if (os.contains("Windows") ||os.contains("Mac OS X")) {
             return new String[] { "common", "system","dev" };
         }
         /**
